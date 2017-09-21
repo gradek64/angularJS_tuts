@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>local storage example</title>
+</head>
+<body>
+<div class="container">
+	<input type="text" name='username'  placeholder="username"></br>
+	<input type="password" name='password'  placeholder="password"></br>
+	<input type="email" name='emails' id="emailID" placeholder="email"></br>
+	<input type="text" name='lastname'  placeholder="lastname"></br>
+	<input type="text" name='age'  placeholder="your age"></br>
+	<button id="submitstaff">submit</button>
+	<button id="showResults">show results</button>
+</div>
+<div class="results">
+	<div class="infoUser"></div>
+	<div class="infoPass"></div>
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script type="text/javascript">
+
+
+			
+
+
+
+				var user = {};
+				var myString = localStorage.getItem('usersSet') ? localStorage.getItem('usersSet'): '';
+				//name user.name = '';
+				//name user.password = '';
+				//name user.email = '';
+				//name user.lastname = '';
+				//name user.age = '';
+
+			 $('#submitstaff').click(function(){
+
+				 	user.name = $( "input:text[name=username]" ).val();
+					user.password = $( "input[type=password]" ).val();
+					user.email = $( "input[type=email]" ).val();
+					user.lastname = $( "input:text[name=lastname]" ).val();
+					user.age = $( "input:text[name=age]" ).val();
+
+					console.log(user.email)
+
+					if(!localStorage.getItem('usersSet')){
+						
+						localStorage.setItem("usersSet", JSON.stringify(user));
+						myString = localStorage.getItem('usersSet');
+					} else {
+		
+						myString = localStorage.getItem('usersSet');
+			 			myString += ','+ JSON.stringify(user);
+
+						localStorage.setItem("usersSet", myString);
+						
+					}
+					
+
+			 });
+
+
+			  $('#showResults').click(function(){
+			  		var arraySet = '['+myString+']';
+			  		console.log(myString)
+			  		var set = JSON.parse(arraySet);
+
+			  		console.log(set);
+
+			  });
+
+
+
+
+</script>
+</body>
+</html>

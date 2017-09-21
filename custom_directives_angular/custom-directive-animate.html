@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example - example-example94-production</title>
+  
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-animate.js"></script>
+ <style type="text/css">
+    body {
+  padding: 20px; }
+
+  .list-group-item {
+    cursor: pointer; }
+    .list-group-item.ng-enter, .list-group-item.ng-leave, .list-group-item.ng-move {
+      transition: 0.5s linear all; }
+      .list-group-item.ng-enter-stagger, .list-group-item.ng-leave-stagger,
+      .list-group-item.ng-move-stagger {
+        transition-delay: 0.05s; }
+        .list-group-item.ng-enter, .list-group-item.ng-move,
+        .list-group-item.ng-leave.ng-leave-active {
+          opacity: 0; }
+          .list-group-item.ng-enter.ng-enter-active, .list-group-item.ng-move.ng-move-active,
+          .list-group-item.ng-leave {
+            opacity: 1; }
+            .list-group-item.toggle, .list-group-item.toggle-add,
+            .list-group-item.toggle-remove {
+              transition: 0.5s ease-out all; }
+              .list-group-item.toggle-add-active {
+                text-indent: 1em; }
+                .list-group-item.toggle {
+                  background: #fcf8e3; }
+
+.label.ng-enter, .label.ng-leave {
+  transition: 0.25s ease-in-out all; }
+  .label.ng-enter, .label.ng-leave.ng-leave-active {
+    opacity: 0;
+    margin-left: 2em; }
+    .label.ng-enter.ng-enter-active, .label.ng-leave {
+      opacity: 1;
+      margin-left: 0; }
+
+  </style>
+  <script>
+
+(function() {
+  'use strict';
+
+  angular.module('myApp', ['ngAnimate'])
+    .controller('CountriesCountroller', function($scope, countries) {
+      $scope.search = {
+        name: ''
+      };
+
+      $scope.order = {
+        predicate: 'name',
+
+        toggle: function() {
+          this.predicate = this.isAscending() ? '-name' : 'name';
+        },
+
+        isAscending: function() {
+          return this.predicate === 'name';
+        }
+      };
+
+      $scope.countries = angular.copy(countries);
+    })
+
+    .directive('countryMeta', function($animate) {
+      return {
+        restrict: 'A',
+        scope: {
+          country: '=countryMeta'
+        },
+        link: function(scope, element) {
+          var toggled, label;
+
+          // Watch for changes to a country's group
+          scope.$watch('country.group', function(group) {
+            // Create a label element (it not created already)
+            if (!label) {
+              label = angular.element('<span>').addClass('label label-info');
+            }
+
+
+            console.log(label);
+
+            // Display data bound by its parent controller
+            label.text('Group ' + group);
+          });
+
+          // Listen for mouse events
+          element.on('mouseenter', function() {
+            scope.$apply(function() {
+              var contents = element.contents();
+
+              console.log(label);
+
+              // Append the label as a child element and trigger 'ng-enter' transition
+              $animate.enter(label, element, contents.eq(contents.length - 1));
+            });
+          });
+
+          element.on('mouseleave', function() {
+            scope.$apply(function() {
+              // Remove the label from the element and trigger 'ng-leave' transition
+              $animate.leave(label);
+            });
+          });
+
+          element.on('click', function() {
+            scope.$apply(function() {
+              toggled = !toggled;
+
+              if (toggled) {
+                // Add 'toggle' class to the element and trigger 'toggle-add' transition
+                $animate.addClass(element, 'toggle');
+              } else {
+                // Remove 'toggle' class to the element and trigger 'toggle-remove' transition
+                $animate.removeClass(element, 'toggle');
+              }
+            });
+          });
+        }
+      };
+    })
+
+    .constant('countries', [
+      { 'name': 'Algeria', 'group': 'H' },
+      { 'name': 'Argentina', 'group': 'F' },
+      { 'name': 'Australia', 'group': 'B' },
+      { 'name': 'Belgium', 'group': 'H' },
+      { 'name': 'Bosnia and Herzegovina', 'group': 'F' },
+      { 'name': 'Brazil', 'group': 'A' },
+      { 'name': 'Cameroon', 'group': 'A' },
+      { 'name': 'Chile', 'group': 'B' },
+      { 'name': 'Colombia', 'group': 'C' },
+      { 'name': 'Costa Rica', 'group': 'D' },
+      { 'name': 'Croatia', 'group': 'A' },
+      { 'name': 'Ecuador', 'group': 'E' },
+      { 'name': 'England', 'group': 'D' },
+      { 'name': 'France', 'group': 'E' },
+      { 'name': 'Germany', 'group': 'G' },
+      { 'name': 'Ghana', 'group': 'G' },
+      { 'name': 'Greece', 'group': 'C' },
+      { 'name': 'Honduras', 'group': 'E' },
+      { 'name': 'Iran', 'group': 'F' },
+      { 'name': 'Italy', 'group': 'D' },
+      { 'name': 'Ivory Coast', 'group': 'C' },
+      { 'name': 'Japan', 'group': 'C' },
+      { 'name': 'South Korea', 'group': 'H' },
+      { 'name': 'Mexico', 'group': 'A' },
+      { 'name': 'Netherlands', 'group': 'B' },
+      { 'name': 'Nigeria', 'group': 'F' },
+      { 'name': 'Portugal', 'group': 'G' },
+      { 'name': 'Russia', 'group': 'H' },
+      { 'name': 'Spain', 'group': 'B' },
+      { 'name': 'Switzerland', 'group': 'E' },
+      { 'name': 'Uruguay', 'group': 'D' },
+      { 'name': 'United States', 'group': 'G' }
+    ]);
+})();
+
+
+  </script>
+  
+
+  
+</head>
+<body ng-app="myApp" class="ng-scope">
+<div ng-controller="CountriesCountroller" class="panel panel-default">
+  <div class="panel-heading">
+    World Cup 2014
+  </div>
+
+  <ul class="list-group">
+    <li class="list-group-item">
+      <!-- Placing a value in the input value filters the list and triggers 'ng-enter' and 'ng-leave' transition when items are added and removed -->
+      <input ng-model="search.name" type="text" placeholder="Search by name..." class="form-control" />
+    </li>
+
+    <li class="list-group-item">
+      <strong>
+        Country
+      </strong>
+
+      <!-- Clicking on this button reorders the list and triggers 'ng-move' transition -->
+      <button ng-click="order.toggle()" class="btn btn-link btn-xs">
+        <span ng-show="order.isAscending()" class="glyphicon glyphicon-chevron-up"></span>
+        <span ng-hide="order.isAscending()" class="glyphicon glyphicon-chevron-down"></span>
+      </button>
+    </li>
+
+    <!-- Hover or click on any item in the list triggers transitions defined by countryMeta directive -->
+    <li ng-repeat="country in countries | filter:search | orderBy:order.predicate" country-meta="country" class="list-group-item">
+      {{ country.name }}
+    </li>
+  </ul>
+</div>
+
+
+</body>
+</html>
+
+
+
+
+ul.list>li#

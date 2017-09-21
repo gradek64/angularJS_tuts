@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example - example-example94-production</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-animate.js"></script>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="directive_code.js"></script>
+  <style type="text/css">
+    body {
+  padding: 20px; }
+
+   .grab {
+    cursor: pointer; }
+    .grab.ng-enter, .grab.ng-leave, .grab.ng-move {
+      transition: 0.5s linear all; }
+      .grab.ng-enter-stagger, .grab.ng-leave-stagger,
+      .grab.ng-move-stagger {
+        transition-delay: 0.05s; }
+        .grab.ng-enter, .grab.ng-move,
+        .grab.ng-leave.ng-leave-active {
+          opacity: 0; }
+          .grab.ng-enter.ng-enter-active, .grab.ng-move.ng-move-active,
+          .grab.ng-leave {
+            opacity: 1; }
+            .grab.toggle, .grab.toggle-add,
+            .grab.toggle-remove {
+              transition: 0.5s ease-out all; }
+              .grab.toggle-add-active {
+                text-indent: 1em; }
+                .grab.toggle {
+                  background: #fcf8e3; }
+
+.label.ng-enter, .label.ng-leave {
+  transition: 0.25s ease-in-out all; }
+  .label.ng-enter, .label.ng-leave.ng-leave-active {
+    opacity: 0;
+    margin-left: 2em; }
+    .label.ng-enter.ng-enter-active, .label.ng-leave {
+      opacity: 1;
+      margin-left: 0; }
+
+      .animated {
+        opacity:1;
+        font-size:100%;
+        -webkit-animation-name: mymove;  /* Chrome, Safari, Opera */
+        -webkit-animation-duration: 5s;  /* Chrome, Safari, Opera */
+        animation-name: mymove;
+        animation-duration: 1s;
+      }
+              /* Chrome, Safari, Opera */
+        
+      @-webkit-keyframes mymove {
+             from { font-size:75%; 0;opacity: 0 }
+             to   { font-size:100%;opacity: 1;}
+      }
+
+      .animatedBack {
+        opacity:0;
+        font-size:75%;
+        -webkit-animation-name: mymoveback;  /* Chrome, Safari, Opera */
+        -webkit-animation-duration: 5s;  /* Chrome, Safari, Opera */
+        animation-name: mymoveback;
+        animation-duration: 1s;
+      }
+              /* Chrome, Safari, Opera */
+        
+      @-webkit-keyframes mymoveback {
+             from { font-size:100%; 0;opacity: 1 }
+             to   { font-size:75%;opacity: 0;}
+      }
+
+  </style>
+
+  <script>
+
+
+
+(function(angular) {
+  'use strict';
+
+      angular.module('myApp')
+          .controller('mainController', function($scope,countries) {  //important constant into main controller;
+
+          $scope.myCountries = countries;
+          $scope.user = "Greg";
+          })
+
+          //constant passed to directive but assigned in main controller;
+          .constant('countries', [
+                { 'name': 'Algeria', 'group': 'H' },
+                { 'name': 'Argentina', 'group': 'F' },
+                { 'name': 'Australia', 'group': 'B' },
+                { 'name': 'Belgium', 'group': 'H' },
+                { 'name': 'Bosnia and Herzegovina', 'group': 'F' },
+                { 'name': 'Brazil', 'group': 'A' },
+                { 'name': 'Cameroon', 'group': 'A' },
+                { 'name': 'Chile', 'group': 'B' },
+                { 'name': 'Colombia', 'group': 'C' },
+                { 'name': 'Costa Rica', 'group': 'D' },
+                { 'name': 'Croatia', 'group': 'A' },
+                { 'name': 'Ecuador', 'group': 'E' },
+                { 'name': 'England', 'group': 'D' },
+                { 'name': 'France', 'group': 'E' },
+                { 'name': 'Germany', 'group': 'G' },
+                { 'name': 'Ghana', 'group': 'G' },
+                { 'name': 'Greece', 'group': 'C' },
+                { 'name': 'Honduras', 'group': 'E' },
+                { 'name': 'Iran', 'group': 'F' },
+                { 'name': 'Italy', 'group': 'D' },
+                { 'name': 'Ivory Coast', 'group': 'C' },
+                { 'name': 'Japan', 'group': 'C' },
+                { 'name': 'South Korea', 'group': 'H' },
+                { 'name': 'Mexico', 'group': 'A' },
+                { 'name': 'Netherlands', 'group': 'B' },
+                { 'name': 'Nigeria', 'group': 'F' },
+                { 'name': 'Portugal', 'group': 'G' },
+                { 'name': 'Russia', 'group': 'H' },
+                { 'name': 'Spain', 'group': 'B' },
+                { 'name': 'Switzerland', 'group': 'E' },
+                { 'name': 'Uruguay', 'group': 'D' },
+                { 'name': 'United States', 'group': 'G' }
+          ]);
+
+   
+
+
+})(window.angular);
+
+  </script>
+  
+
+  
+</head>
+<body ng-app="myApp" ng-controller="mainController">
+
+   <div style="width:50%;float:right;">
+   <countries current-user="hello {{user}}" meta-coutries="myCountries"></countries>
+   </div>
+
+</body>
+</html>

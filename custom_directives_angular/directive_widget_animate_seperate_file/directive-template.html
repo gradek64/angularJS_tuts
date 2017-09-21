@@ -1,0 +1,63 @@
+<style>
+  
+  [ng-if] {}
+
+[ng-if].ng-enter {
+  -webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+  transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+}
+
+[ng-if].ng-enter,
+[ng-if].ng-leave.ng-leave-active {
+  opacity: 0;
+}
+
+[ng-if].ng-leave,
+[ng-if].ng-enter.ng-enter-active {
+  opacity: 1;
+}
+
+</style>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    World Cup 2014
+  </div>
+
+  <ul class="list-group">
+    <li class="list-group-item">
+      <!-- Placing a value in the input value filters the list and triggers 'ng-enter' and 'ng-leave' transition when items are added and removed 
+      <input ng-model="search.name" type="text" placeholder="Search by name..." class="form-control" />
+    </li>-->
+
+    <li class="list-group-item">
+      <strong>
+        {{user}}
+      </strong>
+
+    <li class="list-group-item">
+      <!-- Placing a value in the input value filters the list and triggers 'ng-enter' and 'ng-leave' transition when items are added and removed -->
+      <input ng-model="search.name" type="text" placeholder="Search by name..." class="form-control" />
+    </li>
+
+
+    <li class="list-group-item">
+      <strong>
+        Country
+      </strong>
+
+      <!-- Clicking on this button reorders the list and triggers 'ng-move' transition 
+      <button ng-click="order.toggle()" class="btn btn-link btn-xs">
+        <span ng-show="order.isAscending()" class="glyphicon glyphicon-chevron-up"></span>
+        <span ng-hide="order.isAscending()" class="glyphicon glyphicon-chevron-down"></span>
+      </button>
+    </li>-->
+
+    <!-- Hover or click on any item in the list triggers transitions defined by countryMeta directive | filter:search | orderBy:order.predicate-->
+    <ul class="list-group">
+        <li ng-repeat="country in countryList | filter:search " country-meta="country" class="list-group-item grab">
+          {{ country.name }}
+        </li> 
+    </ul>
+  </ul>
+</div>

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example - ng-if aniamte</title>
+ 
+ <style type="text/css">
+
+
+  /*IMPORTANT 
+      ngIf  USING enter and leave CLASSES BELOW 
+      ( full list at https://docs.angularjs.org/api/ngAnimate DIRECTIVE SUPPORT );
+  */
+
+    .fade..ng-enter-prepare { /*adtional class in case animation fires before added flickering */
+      opacity: 0;
+    }
+
+     /* start animation*/
+    .fade.ng-enter {
+      transition:2s linear all;
+       opacity:0;
+    }
+
+    /* The finishing CSS styles for the enter animation */
+    .fade.ng-enter.ng-enter-active {
+      opacity:1;
+    }
+
+
+    /* transition on leave */
+    .fade.ng-leave {
+      transition:2s linear all;
+       opacity:1;
+    }
+    .fade.ng-leave.ng-leave-active {
+      opacity:0;
+    }
+
+ </style>
+  
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-animate.js"></script>
+
+</head>
+<body ng-app="ngAnimate">
+
+  <div ng-if="bool" class="fade">
+    Fade me in out
+  </div>
+  <button ng-click="bool=true">Fade In!</button>
+  <button ng-click="bool=false">Fade Out!</button>
+
+</body>
+</html>

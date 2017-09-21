@@ -1,0 +1,28 @@
+<html lang="en">
+<head>
+  <title>AngularJS - UI Router - Example 1</title>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  
+
+</head>
+<body ng-app='transitions' ng-controller='tCtrl as ctrl' style="background-color: {{ctrl.bg}}">
+  
+  <div class='container'>
+  
+  <div ui-view id="view" ng-class="ctrl.transition"></div>
+    
+  </div>
+  
+   <h4>By <a href="http://shmck.com">ShMcK</a></h4>
+
+  <script data-require="angular.js@1.2.10" data-semver="1.2.10" src="http://code.angularjs.org/1.2.10/angular.min.js"></script>
+  <script data-require="angular-animate@1.2.11" data-semver="1.2.11" src="http://code.angularjs.org/1.2.11/angular-animate.min.js"></script>
+  <script src="http://angular-ui.github.io/ui-router/release/angular-ui-router.min.js"></script>
+  <script src='app.js'></script>
+</body>
+</html>

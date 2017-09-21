@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css"> article {display: block;border: none;	}	.pic {float: right;max-width: 100px;	} article {background-color: lightgrey;}</style>
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <meta charset="utf-8">
+  <title>Card Demo</title>
+</head>
+<body ng-app="myCards" ng-controller='MainAppController'>
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+
+		<!-- 
+
+
+		TRANSCLUSION IS THE WAY OF INJECTION Directive tag TEMPLATE <directiveName propertySet='propertySet'></directiveName> INTO ANGULAR DIRECTIVE SCRIPT TEMPLATE <script id='angularTemplate'></script>
+
+
+		-->
+
+
+
+
+
+
+<!--
+
+
+					1. Directive template with no TRANSCLUSION; 
+
+-->
+</br></br></br>
+<div style="border:3px dashed green;">
+		<h3>1. TRANSCLUSION is the way to attach original content of directive as &lt;directive-name> original content &lt;directive-name> by noumerous method as:
+		ng-include,transclude(),$transcludeElement etc . so orignal conent is beinng added as well not completely replaced</h3>
+
+	
+
+<script type="text/javascript">
+
+	var app = angular.module('myCards', []);
+
+
+
+		//connecting with Controller with attributes in isolated scoppe, inherited scope from controller;
+
+
+		//THIS IS A MAIN CONTROLLER DIFINED IN <body> section as ng-controller='MainAppController';
+		app.controller('MainAppController',function($scope){
+
+
+
+			/*
+				1....NO TRANSCLUSION with isolated scope;
+			*/
+
+			//main scope proerty which is inherited in directive wiht no ISOLATED SCOPE scope={};
+			$scope.userMainController = 'this  belongs to main SCOPE controller';
+
+
+			/*
+				2....Simple TRANSCLUSION 2. Directive template transclued by transclude() method in link function. 
+			*/
+
+			//main scope proerty which is inherited in directive wiht no ISOLATED SCOPE scope={};
+			$scope.mainControllerValue = 'this  belongs to main SCOPE controller 2';
+
+
+
+			/*
+				3....Simple TRANSCLUSION 2. Directive template transclued by transclude() method in link function. 
+			*/
+
+			//main scope proerty which is inherited in directive wiht no ISOLATED SCOPE scope={};
+			$scope.controllerValue = 'this  belongs to main SCOPE controller 3';
+
+
+
+
+			/*
+				4....Directive nested into another Directive and the point for transclusion
+			*/
+
+			//main scope proerty which is inherited in directive wiht no ISOLATED SCOPE scope={};
+			$scope.controllerValue4 = 'this  belongs to main SCOPE controller 4';
+
+
+
+
+			/*
+				5....transclude into Directive Controller;
+			*/
+
+			//main scope proerty which is inherited in directive wiht no ISOLATED SCOPE scope={};
+			$scope.controllerValue5 = 'this  belongs to main SCOPE controller 5';
+
+
+
+			/*
+				6....transclude into Directive Controller in link function ;
+			*/
+
+			//main scope proerty which is inherited in directive wiht no ISOLATED SCOPE scope={};
+			$scope.controllerValue6 = 'this  belongs to main SCOPE controller 6';
+
+
+
+			/*
+				7....ng-translude as hook for template used insted of transclude() method.
+			*/
+
+			//main scope proerty which is inherited in directive wiht no ISOLATED SCOPE scope={};
+			$scope.controllerValue7 = 'this  belongs to main SCOPE controller 7';
+
+
+			/*
+				8.... this is data linked to 8.  ng-transclude with loop anda data in Main controller;
+			*/
+			 
+			  
+
+			  console.log('MainAppController');
+			  //console.log(data);
+			  console.log('MainAppController scope');
+			  //console.log($scope);
+
+
+			  $scope.titleMainController = 'Ilfracombe';
+			  $scope.picMainController = 'http://teropa.info/ilfracombe.jpg';
+			  $scope.contentMainController = [
+			    ' 1 NG-REPEAP paragarph Ilfracombe /ˈɪlfrəkuːm/ is a seaside resort and civil parish on the North Devon coast, England with a small harbour, surrounded by cliffs.',
+			    ' 2 NG-REPEAT paragarph The parish stretches along the coast from \'The Coastguard Cottages\' in Hele Bay toward the east and 4 miles along The Torrs to Lee Bay toward the west. The resort is hilly and the highest point within the parish boundary is at \'Hore Down Gate\', 2 miles inland and 860 feet (270 m) above sea level.',
+			    ' 3 NG-REPEAT paragarph The parish stretches along the coast from \'The Coastguard Cottages\' in Hele Bay toward the east and 4 miles along The Torrs to Lee Bay toward the west. The resort is hilly and the highest point within the parish boundary is at \'Hore Down Gate\', 2 miles inland and 860 feet (270 m) above sea level.'
+			  ];
+
+
+
+
+			/*
+				9....Destroy scope method;
+			*/
+
+			//main scope proerty which is inherited in directive wiht no ISOLATED SCOPE scope={};
+			$scope.controllerValue9 = 'this belongs to main SCOPE controller 9';
+
+
+
+			/*
+				10....Destroy scope method;
+			*/
+
+			//main scope proerty which is inherited in directive wiht no ISOLATED SCOPE scope={};
+			$scope.controllerValue10 = 'this belongs to main SCOPE controller 10';
+
+
+
+
+			/*
+				11....transclue element on click event;
+			*/
+
+			 $scope.user = 'this is belongs to main SCOPE controller';	
+			 $scope.clicked = false;		  
+			 $scope.click = function() {
+			   $scope.clicked = true;
+			    //console.log($scope.clicked);
+			 };
+
+
+
+			/*
+				13....ng-transluce with all propertis inherited from MAIN CONTROLLER wiouth isolated scope;
+			*/
+
+	
+
+
+		});
+
+
+
+		/*
+
+					1. SIMPLE USE OF TEMPLATE WITH NO TRANSCLUSION AND ISOLETED SCOPE WITH PROPERTIES 
+
+		*/
+
+
+
+		app.directive('myCard', function() {
+		  return {
+		  	restrict: 'EA',
+		    scope: { //scope belongs to HTML element of so otherword likks like that scope.title , scope.pic scope.content;
+		      title: '=myTitle',  //TWO-WAY BINDING
+		      pic: '=myPic', //TWO-WAY BINDING
+		      content: '@myContent', //&ONE-WAY BINDING
+		      property:'=propertySet'
+		    },
+		    controller:function($scope){
+		    	console.log('directive scope');
+		    	console.log($scope);
+		    },
+		    templateUrl: 'myCard1' //ti will render its conent and place into html hooks;
+		    //template:'<article> <img class="pic" ng-src="{{pic}}"><h2>{{title}} and {{property}}</h2>{{content}}</article>'
+		  };
+		});
+
+</script>
+
+<!-- my-card is directive template -->
+<!--first template-->
+<my-card my-title="'user is set'" property-set="userMainController"
+           my-pic="'http://teropa.info/ilfracombe.jpg'"
+           my-content="Ilfracombe /ˈɪlfrəkuːm/ is a seaside resort and civil parish on the North Devon coast, England with a small harbour, surrounded by cliffs. The parish stretches along the coast from 'The Coastguard Cottages' in Hele Bay toward the east and 4 miles along The Torrs to Lee Bay toward the west. The resort is hilly and the highest point within the parish boundary is at 'Hore Down Gate', 2 miles inland and 860 feet (270 m) above sea level.">
+
+
+
+           <!-- this where template goes -->
+
+
+
+</my-card>
+<!-- my-card is directive template -->
+
+
+<!--second template-->
+<script type="text/ng-template" id="myCard1">
+    <article>
+      <img class="pic" ng-src="{{pic}}">
+      <h2>{{title}} and {{property}}</h2>
+      {{content}}
+    </article>
+ </script>
+
+
+
+
+</div>
+</br></br></br>
+
+
+
+<!--
+
+
+					2. Directive template transclued by transclude() method in link function. 
+
+-->
+
+
+
+
+<div style="border:1px dashed green;">
+		<h3>2. TRANSCLUSION in a link method by transclude() method</h3>
+
+<script>
+	
+	app.directive('myCardTransclude', function() {
+		  return {
+		    scope: {
+		      title: '=myTitle', //data takken from atribute 
+		      pic: '=myPic', //data takken from atribute
+		      content: '@myContent', //&TEXT BINDING //data takken from atribute
+		      value:'=mainControllerValue',
+		      valuetext:'@' //data takken from Controller
+		    },
+		    templateUrl: 'myCardTransclude',
+		/***important***/ transclude: true, //it has to be true
+		    link: function(scope, el, attrs, ctrl, transclude) {
+	
+		/***important***/ el.find('.content').append(transclude()); //transclude() represents the original contnet of directive betweent tags  !
+
+					/**
+
+								translude() will make a CLONE or original conent and could be used as many times as needed !
+
+
+					**/
+
+		    }
+		  };
+    });
+
+</script>
+<!--first template-->
+<my-card-transclude my-title="'Ilfracombe'" main-controller-value='mainControllerValue' valuetext='"{{mainControllerValue}}"'
+           my-pic="'http://teropa.info/ilfracombe.jpg'"
+           my-content="kkkkkkIlfracombe /ˈɪlfrəkuːm/ is a seaside resort and civil parish on the North Devon coast, England with a small harbour, surrounded by cliffs. The parish stretches along the coast from 'The Coastguard Cottages' in Hele Bay toward the east and 4 miles along The Torrs to Lee Bay toward the west. The resort is hilly and the highest point within the parish boundary is at 'Hore Down Gate', 2 miles inland and 860 feet (270 m) above sea level.">  	
+
+			<p style="color:red;">THIS IS ORIGINAL STATIC DIRECTIE CONTENT BETWEEN DIRECTIVE AND IT IT NOT DISPLAYED IF transclude:true IS NOT SET;</p>
+
+ </my-card-transclude>
+
+ <!--second template -->
+ <script type="text/ng-template" id="myCardTransclude">
+    <article>
+      <img class="pic" ng-src="{{pic}}">
+      <h2>{{title}}</h2>
+      {{content}}
+    </article>
+    <article>
+    	<h3>this part below is beeig added in link function  by transclude() method which is a clone of orignal directive content between tags /<\directive> original content <\/div></h3>
+    	<div class="content"></div>
+    	<p> this is from main Controller {{value}}</p>
+    </article>
+ </script>
+</div>
+</br></br></br>
+
+<!--
+
+
+					3. <data-ng-transclude> markup for adding orignal direcitve stratup to the rendered version 
+
+-->
+
+			<div style="border:1px dashed green;">
+					<h3>3. TRANSCLUSION template and append existing template markup after directive is renderd by &lt;>data-ng-transclude>&lt;</h3>data-ng-transclude></h3>
+					<p>it allows you to append a markup from directive that was there before the directive has been renderd and changed its content</p>
+				
+
+			<script>
+				
+				app.directive('buttonDirective', function() {
+					  return {
+					  	restrict:'AE',
+					  	scope:{
+					  		value:'@' //data takken from main Controller and it has to be string on the other side '{{value}}' incorpolated;
+					  	},
+					    transclude:true,
+					    template: '<button class="bttn-primary bttn" type="button" >'+
+					    			'Greg {{value}} <data-ng-transclude></data-ng-transclude>'+
+					    			'</button>',
+					  };
+			    });
+
+			</script>
+			<button-directive value="'{{controllerValue}}'"> <!--this value has to be interpoloated first so it becomes a String-->
+						
+						<!-- template goes here -->
+						
+					<!-- <data-ng-transclude> -->	
+					<span class="badge">&copy 2017</span>
+					<!-- </data-ng-transclude> -->
+
+			</button-directive>
+			</div>
+			</br></br></br>
+
+
+
+
+			
+
+<!--
+
+
+<!--
+
+
+					4. NESTED Directive into Directive template transclued by transclude() method with a call back . 
+
+-->
+
+<div style="border:1px dashed green;">
+		<h3>4. TRANSCLUSION of template in a link method;></h3>
+		<p>transclude(function(transcludeEl) { callback }) - it creates clone so you can use as many times as needed</p>
+	
+<script>
+
+	app.directive('myCardBack', function() {
+	  return {
+	    scope: {},
+	    controllerAs: 'ctrl',
+	    bindToController: { //bind to conroller has to have controllerAs:'name' assign ! 
+	      title: '=myTitle', //taken from atribute
+	      pic: '=myPic', //taken from atribute
+	      value:'=mainControllerValue'  //taken from main controller;
+	    },
+	    templateUrl: 'myCard4',
+	    transclude: true,
+	    controller: function($scope) { 
+
+	    		console.log('direcitve conntroller 4');
+	    		console.log($scope);
+	    }
+	  };
+	});
+
+	app.directive('myContentTransclusionPoint', function() {
+	  return {
+	    link: function(scope, el, attr, ctrl, transclude) {
+
+	    	console.log('gagaga');
+	    	console.log(transclude());
+
+	    	/*
+					transclude() = represents the content of first template <my-card-back> transclude()  </my-card-back>
+	    	*/
+
+	      el.append(transclude());
+
+	    }
+	  };
+	});
+
+</script>
+		<!--first template -->    <!-- attributes are very sensitive you should use CAPITAL LETTERS at all -->
+		<my-card-back my-title="'Ilfracombe'" my-pic="'http://teropa.info/ilfracombe.jpg'" main-controller-value="controllerValue4" >
+		    <p>Ilfracombe /ˈɪlfrəkuːm/ is a seaside resort and civil parish on the North Devon coast, England with a small harbour, surrounded by cliffs.</p>
+		    <p>The parish stretches along the coast from 'The Coastguard Cottages' in Hele Bay toward the east and 4 miles along The Torrs to Lee Bay toward the west. The resort is hilly and the highest point within the parish boundary is at 'Hore Down Gate', 2 miles inland and 860 feet (270 m) above sea level.</p>
+		  </my-card-back>
+
+		  <!--second template-->
+		  <script type="text/ng-template" id="myCard4">
+		    <article>
+		      <img class="pic" ng-src="{{ctrl.pic}}">
+		      <h2>{{ctrl.title}}</h2>
+
+		      <div my-content-transclusion-point></div>
+		      <p>this is from MainAppController {{ctrl.value}}</p>
+
+		    </article>
+		  </script>
+</div>
+</br></br></br>
+
+
+
+
+
+
+
+<!--
+    		/* 5 *****************************
+					$transclude into controller you can use bindToContorrller from Angular 1.4
+				*********************************/
+-->
+
+
+<div style="border:1px dashed green;">
+		<h3>5. TRANSCLUSION in controller by setting 'controllerAS' and '  Controller'</h3>
+		<p>append(transclude()) in a controller for a directive</p>
+	
+<script>
+
+
+
+		app.directive('myCardController', function() {
+				  return {
+				    scope: {},
+				    controllerAs: 'ctrl5', //and you need to set contoller here to set hooks as {{ ctrl.title }} or {{ctrl.pic}}
+				    bindToController: { //you have to bind data to controller no scope any longer !;
+					      title: '=myTitle',	//taken from atribute
+					      pic: '=myPic',	//taken from attribute
+					      content: '=myContent',	//taken from attribute
+				      	  value:'=mainControllerValue' //taken from main conntroller;
+				    },
+				    templateUrl: 'myCardController',
+				    transclude: true, //you can use transclusion in controller by injecting $transclude;
+					controller: function($element, $transclude) {
+
+
+						/*
+								$transclude() = represents the content of first template <my-card-controller>  $transclude() </my-card-controller>
+	    				*/
+
+							
+							console.log('gage444555555');
+
+							$element.find('.translcudeContent').append( $transclude()  );
+											//$transclude represents template content;
+					},
+				};
+			});
+
+</script>			
+
+
+					<!--first template-->
+					<my-card-controller my-title="'Ilfracombe'" main-controller-value="controllerValue5"
+					         my-pic="'http://teropa.info/ilfracombe.jpg'"
+					         my-content="'this is content set'">
+
+								<!-- this is content of transclude() -->
+					         		<p style="color:red;">this is transclude() content basically what is inside my-card-controller /my-card-controller </p>
+					         	<!-- this is content of transclude() -->
+
+					</my-card-controller>
+
+
+					<!--second template-->
+					<script type="text/ng-template" id="myCardController">
+					  <article>
+					    <img class="pic" ng-src="{{ctrl5.pic}}">
+					    <h2>{{ctrl5.title}}</h2>
+
+					    <div>{{ctrl5.content}}</div>
+					    <div class="translcudeContent"></div>
+					    <p>this is from MainAppController {{ctrl5.value}}</p>
+
+					  </article>
+					</script>
+</div>
+</br></br></br>
+
+
+					<!--******************************
+					6. NESTED DIRECTIVES - parent and child directive and scope between them; 
+				*********************************-->
+
+
+
+<div style="border:1px dashed green;">
+		<h3>6. TRANSCLUSION in NESTED DIRECTIVES</h3>
+		<p>parent and child directive and scope between them; so the child knows about parent variables</p>
+<script>
+
+
+		
+
+			app.directive('myCardParentDirective', function() {
+				  return {
+				    scope: {},
+				    controllerAs: 'ctrl6',
+				    bindToController: {
+				      title: '=myTitle',  //taken from attribute
+				      pic: '=myPic', //taken from attribute
+				      value:'=mainControllerValue' //taken from main Controller;
+				    },
+				    templateUrl: 'myCardParentDirective',
+				    transclude: true,
+				    controller: function() { },
+				};
+			});
+
+			//this directive is cleary for myCard template placement (decleared in parent Directive) and it will inherit the scope of the parent directive;
+			app.directive('myContentTransclusionPoint1', function() {
+				  return {
+				    link: function(scope, el, attr, ctrl, transclude) {
+
+
+				    	/*
+								$transclude() = represents the content of first template <my-card-controller>  $transclude() </my-card-controller>
+	    				*/
+
+
+				      el.append(transclude()); //no need for jQuery as we have hook for directive for placement;
+				    }
+				}
+			});
+</script>						
+		<my-card-parent-directive 
+				   my-title="'Ilfracombe'"
+		       my-pic="'http://teropa.info/ilfracombe.jpg'" main-controller-value='controllerValue6' >
+
+
+		       	<!-- this is content of transclude() -->
+
+
+			    <p>Ilfracombe /ˈɪlfrəkuːm/ is a seaside resort and civil parish on the North Devon coast, England with a small harbour, surrounded by cliffs.</p>
+			    <p>The parish stretches along the coast from 'The Coastguard Cottages' in Hele Bay toward the east and 4 miles along The Torrs to Lee Bay toward the west. The resort is hilly and the highest point within the parish boundary is at 'Hore Down Gate', 2 miles inland and 860 feet (270 m) above sea level.</p>
+
+
+			    <!-- this is content of transclude() -->
+		
+
+
+		</my-card-parent-directive>
+
+		<script type="text/ng-template" id="myCardParentDirective">
+				<article>
+				<img class="pic" ng-src="{{ctrl6.pic}}">
+				<h2>{{ctrl6.title}}</h2>
+				<div my-content-transclusion-point1></div><!-- this is nested directive hook -->
+				<p>this is from MainAppController {{ctrl6.value}}</p>
+				</article>
+		</script>
+
+</div>
+</br></br></br>
+
+
+<!--
+						/******************************
+					7. using ng-transclude AS TAG FOR PLACMENT FOR TRASCLUDE CONTENT ng-transclude directive used instead of translude() ;
+				*********************************/
+-->
+
+
+<div style="border:1px dashed green;">
+		<h3>7. TRANSCLUSION using ng-transclude </h3>
+		<p>using ng-transclude AS TAG FOR PLACMENT FOR TRASCLUDE CONTENT;</p>
+
+<script>
+
+			
+
+					app.directive('myCardInclude', function() {
+					  return {
+					    scope: {},
+					    controllerAs: 'ctrl7',
+					    bindToController: {
+					      title: '=myTitle', //taken from attribute
+					      pic: '=myPic',  //taken from attribute
+					      value7: '=mainControllerValue'
+					    },
+					    templateUrl: 'myCardInclude',
+					    transclude: true,
+					    controller: function() { },
+					  };
+					}); //you can set up your directive as usual and instead of hook tag as <div my-content-transclusion-point></div> you can use <div ng-transclude></div>
+						//NO NEED FOR NESTED DIRECTIVE
+
+
+						/*  IMPORTANT 
+
+								The ngTransclude directive also internally uses the clone attach function. This means you can use ng-transclude several times in your template. Each one will insert a clone of the transcluded content.
+
+
+						*/
+</script>
+
+					<my-card-include my-title="'Ilfracombe'" main-controller-value="controllerValue7"
+					         my-pic="'http://teropa.info/ilfracombe.jpg'"
+					         my-content="Ilfracombe /ˈɪlfrəkuːm/ is a seaside resort and civil parish on the North Devon coast, England with a small harbour, surrounded by cliffs. The parish stretches along the coast from 'The Coastguard Cottages' in Hele Bay toward the east and 4 miles along The Torrs to Lee Bay toward the west. The resort is hilly and the highest point within the parish boundary is at 'Hore Down Gate', 2 miles inland and 860 feet (270 m) above sea level.">
+
+							
+								<!-- this is content of transclude() -->
+
+					         	<p style="color:red;">this is content that is being transcluded in atribute ng-trasclude in this case </p>
+
+					         	<!-- this is content of transclude() -->
+
+
+
+					</my-card-include>
+				    <script type="text/ng-template" id="myCardInclude">
+				      <article>
+				        <img class="pic" ng-src="{{ctrl7.pic}}">
+				        <h2>{{ctrl7.title}}</h2>
+				        <div ng-transclude ></div><!-- ng transluce is used insted of translucde() -->
+				        <p>this is from MainAppController {{ctrl7.value7}}</p>
+
+				      </article>
+				    </script>
+
+			</div>
+</div>
+</br></br></br>
+
+
+
+	<!-- /******************************
+
+					8.  ng-transclude with loop;
+				
+				*********************************/
+
+	-->
+
+
+<div style="border:1px dashed green;">
+		<h3>8. TRANSCLUSION template  in loop using ng-transclude </h3>
+		<p>using ng-transclude AS TAG FOR PLACMENT FOR TRASCLUDE CONTENT;</p>
+<script>
+		
+
+			app.directive('myCardNestedTemplate', function() {
+			  return {
+			    controllerAs: 'ctrl8',
+			    bindToController: {
+			      title: '=myTitle',  //takken from Main Controller
+			      pic: '=myPic'  //taken from Main Controller 
+			    },
+			    templateUrl: 'myCardNestedTemplate',
+			    transclude: true,
+			    controller:function(){} //controller has to be defined even though it is not used;
+			  };
+			});
+
+
+
+</script>				
+
+				<div><!-- ng-controller="MainAppController as datas" -->
+					    <my-card-nested-template my-title="title" my-pic="picMainController">
+
+						
+						<!-- this is content of transclude() -->
+
+					      <p ng-repeat="p in contentMainController track by $index">
+					        {{p}}
+					      </p>
+
+					      <p style="color:red;">This is part that is being transcluded by ng-trasclude attribute or transclude() so everything between &lt;my-card-nested-template>&lt;/my-card-nested-template></p>
+
+						<!-- this is content of transclude() -->
+
+
+
+
+					    </my-card-nested-template>
+					    
+					    <script type="text/ng-template" id="myCardNestedTemplate">
+					      <article>
+					        <img class="pic" ng-src="{{ctrl8.pic}}">
+					        <h2>{{ctrl8.title}}</h2>
+					        <div ng-transclude ></div>
+					        <p></p>
+					      </article>
+					    </script>
+
+				</div>
+</div>
+</br></br></br>
+
+
+
+	<!-- /******************************
+
+					9. $destroy directive scope
+				
+				*********************************/
+
+	-->
+
+
+
+<div style="border:1px dashed green;">
+		<h3>9. TRANSCLUSION $destroy directive scope </h3>
+		<p> transcludedScope.$destroy(); - when you need to remove some part of directive but not entire directive as this example </p>
+<script>
+
+				app.directive('myCardDestroy', function() {
+				  return {
+				    scope: {},
+				    controllerAs: 'ctrl9',
+				    bindToController: {/* this links togehter template atributes as my-title and my-pic with controler variables as ctrl.title and control.pic*/
+				      title: '=myTitle', //taken from attribute
+				      pic: '=myPic', //taken from attribute;
+				      value9:'=mainControllerValue'
+				    },
+				    templateUrl: 'myCardDestroy',
+				    transclude: true,
+				    controller: function($element, $transclude) {
+				      var ctrl = this;
+				      var contents = $element.find('.contents'); 
+				      var transcludedScope;
+				      
+				      ctrl.expand = function() {
+				      			/*
+											EtransScope =  The transclusion function gives that scope to us as the second argument of the clone attach function. 
+											If we just hold on to it, we can call $destroy() on it later. if the content has been removed.
+				      			*/
+
+					        $transclude(function(transEl, transScope) { //	THIS FUNCTION ALWAYS MAKES A CLONE AND COULD BE DUPLICATED 
+					        			/* IMPORTANT 
+					        				$transclude(callback) by default only represents the content between directive tempplate as <my-card-destroy>CONTENT</<my-card-destroy>
+					        				It doesnt repressnt the atributes assing in the thag as <my-card-destroy my-title='Greg'> those need to be assign by Controller.myTitle;
+					        			*/
+					        	console.log(transEl);
+					          contents.append(transEl);
+					          transcludedScope = transScope;
+
+					        });
+					        ctrl.expanded = true;
+				      };
+
+				      ctrl.collapse = function() {
+				        transcludedScope.$destroy();
+
+				        transcludedScope = null;
+				        contents.empty();
+				        ctrl.expanded = false;
+				      };
+				      
+				      
+				    }
+				  };
+				});
+</script>
+
+				
+				<my-card-destroy my-title="'Ilfracombe'" main-controller-value="controllerValue9"
+				           my-pic="'http://teropa.info/ilfracombe.jpg'">
+
+				    	<!-- this is content of transclude() -->
+       
+				    <p style="color:red;">Ilfracombe /ˈɪlfrəkuːm/ is a seaside resort and civil parish on the North Devon coast, England with a small harbour, surrounded by cliffs.</p>
+				    <p p style="color:red;">The parish stretches along the coast from \'The Coastguard Cottages\' in Hele Bay toward the east and 4 miles along The Torrs to Lee Bay toward the west. The resort is hilly and the highest point within the parish boundary is at \'Hore Down Gate\', 2 miles inland and 860 feet (270 m) above sea level.</p>
+
+						<!-- this is content of transclude() -->
+
+
+
+
+				  </my-card-destroy>
+				  
+				  <script type="text/ng-template" id="myCardDestroy">
+				    <article>
+				      <figure ng-show="ctrl.expanded">
+				        <img class="pic" ng-src="{{ctrl9.pic}}">
+				      </figure>
+				      <h2>
+				        <button ng-if="!ctrl9.expanded"
+				                ng-click="ctrl9.expand()">
+				          &#9656;
+				        </button>
+				        <button ng-if="ctrl9.expanded"
+				                ng-click="ctrl9.collapse()">
+				          &#9662;
+				        </button>
+				        {{ctrl.title}}
+				      </h2>
+				      <div class="contents"></div>
+				      <p>this is from MainAppController {{ctrl9.value9}}</p>
+
+				   </article>
+				  </script>
+</div>
+</br></br></br>
+
+	<!-- /******************************
+
+					10. defining you own scope in Controller
+				
+				*********************************/
+
+	-->
+
+
+<div style="border:1px dashed green;">
+		<h3>10. defining you own scope in Directive Controller </h3>
+		<p>defining template in directive controller and using $transclude($scope, function(transEl) {$element.append(transEl);}); to render in Directive Controller</p>
+
+<script>
+
+
+				app.directive('townView', function() {
+				  return {
+				    scope: {
+				    	value10:'=mainControllerValue' // to access this property you need to only use {{value10}} cause it got nothing to do with 
+				    	//directive controller below very interesing ;)
+				    },
+				    controllerAs: 'town',
+				    transclude: true,
+				    controller: function($scope, $element, $transclude) {
+				      var townContent = this;
+
+
+				      /*those value are only accessable for thit directive cause they are set in directive controller*/
+
+				      console.log('gaga10101');
+				      console.log($scope);
+				      
+				      townContent.title = 'Ilfracombe';
+				      townContent.pic = 'http://teropa.info/ilfracombe.jpg';
+				      townContent.content = [
+				        'Ilfracombe /ˈɪlfrəkuːm/ is a seaside resort and civil parish on the North Devon coast, England with a small harbour, surrounded by cliffs.',
+				        'The parish stretches along the coast from \'The Coastguard Cottages\' in Hele Bay toward the east and 4 miles along The Torrs to Lee Bay toward the west. The resort is hilly and the highest point within the parish boundary is at \'Hore Down Gate\', 2 miles inland and 860 feet (270 m) above sea level.'
+				      ];
+				      
+				      $transclude($scope, function(transEl) {
+				        $element.append(transEl);
+				      });
+				    }
+				  };
+				});
+
+
+</script>
+				 
+				<!-- directive tag -->
+				 <town-view main-controller-value='controllerValue10'>
+							DEFINE YOUR OWN SCOPE
+
+													<!-- this is content of transclude() -->
+
+
+				    <article>
+							    <figure>
+							      <img class="pic" ng-src="{{town.pic}}">
+							    </figure>
+							    <h2>
+							      {{town.title}}
+							    </h2>
+							    <div>
+							      <p ng-repeat="pocket in town.content">
+							        this is loop : {{pocket}}
+							      </p>
+							    </div>
+							    <div class="fromMainController" style="color:red;">this is from MainAppController {{value10}}</div>
+					 </article>	 
+
+					 						<!-- this is content of transclude() -->
+
+   
+				</town-view> 
+				   
+</div>
+</br></br></br>
+
+
+
+	<!-- /******************************
+
+					11. el.after(transclude()); fired in click event
+				
+				*********************************/
+
+	-->
+
+<div style="border:1px dashed green;">
+		<h3>11. el.after(transclude()); fired in click event </h3>
+		<p>proccess directive based on click event</p>
+
+<script>			
+					/******************************
+					defining your own scope for directive in Controller ; 
+				*********************************/
+	
+
+
+					app.directive('myShowAfter', function() {
+					  return {
+					    //transclude: 'element',
+					    scope: {
+					        own:'=attributeSet',
+					        outside:'=mainControllerValue'
+					    },
+					    ///templateUrl:'showTemplate',
+					    transclude: 'element', //with transclude element you can use templateURL scritp wont work on both templates 
+					    link: function(scope, el, attrs, ctrl, transclude) {
+					    	console.log('attrs');
+					    	console.log(attrs.myShowAfter);
+
+					      //value of attrs.myShowAfter is being watched for changes;
+					      var removeWatch = scope.$watch(attrs.myShowAfter,function(val) {  
+
+								console.log('val');
+								console.log(val);
+
+					          if (val) {
+					          	 //add allement onnce attr.myShowAfter changes to true based on click event;
+					          	 //add element after button that click is attached in this case  <div class="contents"></div>
+
+
+					          	 console.log('valdqdqd');
+					      	     console.log(val);
+
+
+
+					            el.after( transclude() ); 
+
+					            removeWatch();
+
+					          }
+					        }
+					      );
+
+					       //el.after(transclude()); 
+
+
+
+					    }
+					  };
+					});
+
+
+</script>
+
+					 <div> 
+					 
+					  <!-- this is content of transclude() so Element itself is being transcluded usually transclude:true transclude children -->
+					  <button ng-click='click()' >Click me to show template</button>
+					  <div my-show-after="clicked" attribute-set="'this is has been set just in attribute'" main-controller-value="controllerValue11">
+					    	<p style="color:red;"> this is template 1 to be transluded script template wont work in this case</p>
+
+					  </div>
+
+
+					  <!-- this is content of transclude() -->
+					</div> 
+
+</div>
+</br></br></br>
+
+
+	<!-- /******************************
+
+					12. Repeated Rendering with Element Transclusion sort of ng-repeat for directive
+				
+				*********************************/
+	-->
+<div style="border:1px dashed green;">
+		<h3>12. Repeated Rendering with Element Transclusion sort of ng-repeat for directive</h3>
+		<p>utilizazing forEach loop and transclude() method;</p>
+<script>			
+
+
+					app.directive('myShowEach', function() {
+					  return {
+					    transclude: 'element',
+					    link: function(scope, el, attrs, ctrl, transclude) {
+					      var coll = scope.$eval(attrs.myShowEach);
+					      console.log(coll);
+
+					      coll.forEach(function(each) {
+					        transclude(function(transEl, transScope) {
+					          transScope.myEach = each;
+					          el.parent().append(transEl);
+					        });
+					      });
+					    }
+					  };
+					});		
+
+</script>
+					<div>
+						<article>	
+
+							  <div my-show-each="['one', 'two', 'three']">
+							    {{myEach}}
+							    <p style="color:red;">THIS IS ORIGINAL CONTENT OR DIRECTIVE BETWEEN DIRECTIVE TAGS in this case my-show-each atribute div content></p>
+							  </div>
+							</div>
+
+						</article>
+
+
+</div>
+</br></br></br>
+
+
+
+
+
+	<!-- /******************************
+
+					13.  ng-transclude with all properties inherited from MAIN CONTROLLER so there is no isolated scope scope:{}
+				
+				*********************************/
+
+	-->
+
+
+<div style="border:1px dashed green;">
+		<h3>13. TRANSCLUSION template  in loop using ng-transclude all properties comes from Main Controller (inheritance) </h3>
+		<p>using ng-transclude AS TAG FOR PLACMENT FOR TRASCLUDE CONTENT;</p>
+<script>
+		
+
+			app.directive('mainScopeController', function() {
+			  return {
+			    controllerAs: 'direcitve_scope', //this controller is accessible only in directive itself;
+			    bindToController: {
+			      	directiveValue:'=passedFromMainController'
+			    },
+			    templateUrl: 'myCardNestedTemplate13',
+			    transclude: true,
+			    controller:function(){
+
+
+			    } 
+			  };
+			});
+
+
+
+</script>				
+
+				<div><!-- ng-controller="MainAppController as datas" -->
+					    <main-scope-controller  passed-from-main-controller="titleMainController"   >
+
+						
+		<!-- this is content of transclude() -->
+
+
+         <!-- all those value come from MAIN controller which is is set as : ng-controller = 'MainAppController' so no extended object only scope    -->
+					      <p ng-repeat="p in contentMainController track by $index"> <!--comes from $scope.contentMainController -->
+					        {{p}}
+					      </p>
+
+					      <p style="color:red;">This is part that is being transcluded by ng-trasclude attribute or transclude() so everything between &lt;my-card-nested-template>&lt;/my-card-nested-template></p>
+
+						<!-- this is content of transclude() -->
+
+
+
+
+					    </main-scope-controller>
+					    
+					    <script type="text/ng-template" id="myCardNestedTemplate13">
+					      <article>
+
+					        <img class="pic" ng-src="{{picMainController}}"> <!--comes from $scope.picMainController -->
+					        <h2>{{titleMainController}}</h2> <!--comes from $scope.titleMainController -->
+
+					        <div ng-transclude ></div>
+					        <p style="color: red"> this property has been passed from MainContoller to direcitve {{ direcitve_scope.directiveValue }} rest of them belongs to MainContoller </p>
+					      </article>
+					    </script>
+
+				</div>
+</div>
+</br></br></br>
+
+
+<!-- /******************************
+
+					14. $parse and scope.$eval
+				
+				*********************************/
+	-->
+<div style="border:1px dashed green;">
+		<h3>14. $parse and scope.$eval in Directive</h3>
+
+ <script>			
+ 						app.directive('myDirective', function( $parse, $log ) {
+ 						    return function( scope, el, attrs ) {
+ 						        // $parse converts Angular expression to a function 
+ 						        var getModel = $parse( 'name'); //this is eqwivalent to : var model = function(value){ return attrs.myAttr };
+ 						        var setModel = getModel.assign; //this is eqwivalent to : var setModel = function(){ attrs.myAttr='value' };
+
+ 						        //contruct you object with values;
+ 						        var context = {name:'Greg'};
+
+
+ 						        el.bind('click', function() {
+ 						            
+ 						             scope.name = getModel(context);
+
+ 						             scope.value = $parse(attrs.myAttr)(); //it has to be exectued as function here or in expresion {{ value() }} 
+ 						             scope.evalValue = scope.$eval(attrs.myEval);
+ 						             scope.$apply();
+ 						        })
+ 						    }
+
+ 						});
+ 						
+
+ </script> 
+ 					<div style="height: 50px;">
+ 							<div my-attr="2+2" my-eval='2*2' my-directive>click me</div>
+ 							<div>name: {{name}} value: {{ value }} and evalValue {{evalValue}}</div>
+ 					</div>
+
+</div>
+</br></br></br>
+
+
+<my-test>this is text before translude</my-test>
+<script>			
+ 						app.directive('myTest', function() {
+ 						    return {
+ 						    	compile:function(){
+ 						    		
+ 						    	}
+ 						     
+ 						    }
+
+ 						});
+ 						
+
+ </script> 
+
+</body>
+</html>

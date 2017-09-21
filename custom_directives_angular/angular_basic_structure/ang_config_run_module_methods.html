@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example - example-example41-production</title>
+</head>
+<body >
+  <div ng-app="myApp">
+  <div>
+    {{ 'World' | greet }}
+  </div>
+</div>
+
+  <script src="bower_components/angular/angular.min.js"></script>
+  <script>
+
+ (function(angular) {
+  	'use strict';
+	//declare a module
+	var myAppModule = angular.module('myApp', []);
+
+	// configure the module.
+	// in this example we will create a greeting filter
+	myAppModule.filter('greet', function() {
+	 return function(name) {
+    	return 'Hello, ' + name + '!';
+  	};
+	});
+
+})(window.angular);
+	
+	
+ </script>
+  
+</body>
+</html>
+
+<!-- 
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+-->

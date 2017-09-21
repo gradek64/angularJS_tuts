@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>directive scope</title>
+   
+  <!--<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>-->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body ng-app="myApp" >
+
+<div ng-controller="AppCtrl as mainCtrl">
+   <div class="row">
+  
+
+<div class="col-md-4">
+
+
+<script type="text/javascript">
+
+
+          /************** Main Controller *********/
+
+ var app = angular.module('myApp', [])
+            .controller('AppCtrl', function($scope){
+
+                  var mainController = this;
+
+                  mainController.valueFromMainController = 'value from main contorller';
+                  mainController.valueFromMainControllerOneWay  = 'value from main contorller one way {{interpolation needed}}';
+
+                  //method
+                  mainController.methodInController =function(){
+                        console.log('mouseover applied');
+                  };
+
+            });
+
+     
+
+        /************** Main Controller *********/
+
+</script>
+
+
+<script>
+            /************* 1 no scope defined ,transclude:true inhertits from main Controler into template and transcludion scope *****/
+
+
+
+ app.directive('profilePanel1', function(){
+    return {
+        restrict: 'EA',
+        transclude:true,
+                      /*
+                          you set transclude to true, Angular will save a clone, or copy, of the user's content before adding in the directive template. That way, it won't be overwritten and will be available to add to the DOM during the linking phase.
+                      */
+        controller:function($scope){
+
+          console.log('1 scope:false (default) it inherits from main Controller scope');  
+          console.log($scope);
+
+          //you can change  mainController.valueFromMainController cause it is inherited from main Conntrller as Javasript inheritence;
+          $scope.mainCtrl.valueFromMainController = "value from mainController";
+
+        },
+        template: 
+                "<div id='site' style='border: 1px solid red'>"+                                                  
+                          "<header> style='color:red'  transclude:true , main scope:false all inherit in transclude scope"+   
+                "</header>"+   
+
+                        "<nav ng-transclude></nav>"+  
+
+                        "<main ng-transclude></main>"+                               
+                "<footer>"+              
+                " © 2015 OpenTable, Inc."+ 
+                "</footer>"+            
+                "</div>" 
+
+        
+    };
+});
+</script>
+
+
+        <!--Transclusion allows component users to add their own custom template by inserting 
+                    it between the directive's opening and closing tags. -->
+
+    <profile-panel1>
+              <p> this is an original markup between directive's tags and this is one is going to be transcluded into template by ng-transclude attribute</p>
+              <p> scope:false and it inherits scope from MainConroller as : <span style="color:green;font-style: bold;">{{mainCtrl.valueFromMainController}}</span></p>
+    </profile-panel1>
+
+
+
+  <!-- /******************************
+
+          2. no scope (default scope:false) transclue: true that inherits from mainController scope as well directive scope which is not isolated;
+        
+        *********************************/
+  -->
+<div style="border:1px dashed green;">
+    <h3>12. Repeated Rendering with Element Transclusion sort of ng-repeat for directive</h3>
+    <p>utilizazing forEach loop and transclude() method;</p>
+<script>      
+
+
+          app.directive('myShowEach', function() {
+            return {
+              transclude: 'element',
+              controller:function($scope){
+                  $scope.directiveScopeValue = 'directiveScopeValue';
+                  console.log('2 directive scope');
+                  console.log($scope);
+              },
+              link: function(scope, el, attrs, ctrl, transclude) {
+                var coll = scope.$eval(attrs.myShowEach);
+                console.log('2 coll');
+                console.log(coll);
+
+                //loop throus the arra
+                coll.forEach(function(each) {
+
+                  transclude(function(transEl, transScope) { //taransclude create it is own scope that inherits from Parent MainController not a directive scope;
+                    console.log('2 transScope');
+                    console.log(transScope);
+                    transScope.myEach = each;
+                    el.parent().append(transEl);
+                  });
+
+                });
+              }
+            };
+          });   
+
+</script>
+          <div>
+            <article> 2
+                
+                <!-- the one below is a transclude part and it inherits from mainController only -->
+                <div my-show-each="['one', 'two', 'three']"><!-- this tag going to be repeated 3 times -->
+                  {{myEach}}<br>
+                  DIRECTIVEValue : {{directiveScopeValue}}<br><!-- this one wont work cause transclude scope doesnt inherit from directive scope  his parent is mainScope from Controller-->
+                  MainConrollerValue :  {{mainCtrl.valueFromMainController}}
+                </div>
+
+
+
+                <p>this is a directive scope value : {{directiveScopeValue}}</p>
+                <p style="color:red;">THIS IS ORIGINAL CONTENT OR DIRECTIVE BETWEEN DIRECTIVE TAGS in this case my-show-each atribute div content></p>
+              </div>
+
+            </article>
+
+
+</div>
+</br></br></br>
+
+
+
+  <!-- /******************************
+
+          3. no scope (default scope:false) transclue: true that inherits from mainController scope as well directive scope which is not isolated;
+        
+        *********************************/
+  -->
+<div style="border:1px dashed green;">
+    <h3>12. Repeated Rendering with Element Transclusion sort of ng-repeat for directive</h3>
+    <p>utilizazing forEach loop and transclude() method;</p>
+<script>      
+
+
+          app.directive('panel3', function() {
+            return {
+              restrict:'EA',
+              transclude: 'element',
+              controller:function($scope){
+                  $scope.directiveScopeValue = 'directiveScopeValue';
+
+                  console.log('3 scope that inherits from main Contorller');
+                  console.log($scope);
+              },
+              link: function(scope, el, attrs, ctrl, transclude) {
+    
+
+                //loop throus the arra
+
+                  transclude(function(transEl, transScope) { 
+                    console.log('3 transScope');
+                    console.log(transScope);
+                    el.parent().append(transEl); //this is going to be attached to <article> tag which is a parent;
+                  });
+
+              }
+            };
+          });   
+
+</script>
+          <div>
+            <article> 3
+                
+                <!-- the one below is a transclude part and it inherits from mainController only -->
+                <panel3 style='border:1px solid red;'><!-- this tag going to be repeated 3 times -->
+                THIS IS A TRANSCLUSION PART </br></br></br>
+                  DIRECTIVEValue : {{directiveScopeValue}}</br></br><!-- this one wont work cause transclude scope doesnt inherit from directive scope  his parent is mainScope from Controller-->
+                  MainConrollerValue : {{mainCtrl.valueFromMainController}}
+                </panel3>
+
+
+
+                <p>this is a directive scope value : {{directiveScopeValue}}</p>
+                <p style="color:red;">THIS IS ORIGINAL CONTENT OR DIRECTIVE BETWEEN DIRECTIVE TAGS in this case my-show-each atribute div content></p>
+              </div>
+
+            </article>
+
+
+</div>
+</br></br></br>
+
+
+<!-- /******************************
+
+          4. scope ={} (isolated) transclue: true that inherits from mainController scope as well directive scope which is not isolated;
+        
+        *********************************/
+  -->
+<div style="border:1px dashed green;">
+    <h3>Repeated Rendering with Element Transclusion sort of ng-repeat for directive</h3>
+    <p>utilizazing forEach loop and transclude() method;</p>
+<script>      
+
+
+          app.directive('panel4', function() {
+            return {
+              restrict:'EA',
+              transclude: 'element',
+              scope:{},
+              controller:function($scope){
+                  $scope.directiveScopeValue4 = 'directiveScopeValue';
+
+                  console.log('4 scope that inherits from main Contorller');
+                  console.log($scope);
+              },
+              link: function(scope, el, attrs, ctrl, transclude) {
+    
+
+                //loop throus the arra
+
+                  transclude(function(transEl, transScope) { 
+                    console.log('3 transScope');
+                    console.log(transScope);
+                    el.parent().append(transEl); //this is going to be attached to <article> tag which is a parent;
+                  });
+
+              }
+            };
+          });   
+
+</script>
+          <div>
+            <article> 4 
+                 <div style='border:1px solid red;'>
+                        <!-- the one below is a transclude part and it inherits from mainController only -->
+                        <panel4 ><!-- this tag going to be repeated 3 times -->
+
+                        THIS IS A TRANSCLUSION PART </br></br></br>
+                          DIRECTIVEValue : {{directiveScopeValue4}}</br></br><!-- this one wont work cause transclude scope doesnt inherit from directive scope  his parent is mainScope from Controller-->
+                          MainConrollerValue : {{mainCtrl.valueFromMainController}}
+                        </panel4>
+
+                </div>
+
+
+
+                <p>this is a directive scope value outside transclude: {{directiveScopeValue}}</p>
+                <p style="color:red;">THIS IS ORIGINAL CONTENT OR DIRECTIVE BETWEEN DIRECTIVE TAGS in this case my-show-each atribute div content></p>
+              </div>
+
+            </article>
+
+
+</div>
+</br></br></br>
+
+
+

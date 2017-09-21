@@ -1,0 +1,81 @@
+<style>
+  
+  [ng-if] {}
+
+[ng-if].ng-enter {
+  -webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+  transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+}
+
+[ng-if].ng-enter,
+[ng-if].ng-leave.ng-leave-active {
+  opacity: 0;
+}
+
+[ng-if].ng-leave,
+[ng-if].ng-enter.ng-enter-active {
+  opacity: 1;
+}
+
+</style>
+
+<div class="">
+  <div class="">
+    This is second directive
+  </div>
+
+  <ul class="" style="border:1px solid red;">
+    <li class="">
+      <!-- Placing a value in the input value filters the list and triggers 'ng-enter' and 'ng-leave' transition when items are added and removed 
+      <input ng-model="search.name" type="text" placeholder="Search by name..." class="form-control" />
+    </li>-->
+
+    <li class="">
+      <strong>
+        {{user}}
+      </strong>
+
+    <li class="">
+      <!-- Placing a
+       value in the input value filters the list and triggers 'ng-enter' and 'ng-leave' transition when items are added and removed -->
+      <input ng-model="search.name" type="text" placeholder="Search by name..." class="" />
+    </li>
+   
+  </ul>
+    <script src="js/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
+
+<script type="text/javascript">
+
+                     tinymce.init({
+          selector: "textarea",
+          plugins: [
+              "advlist autolink lists link image charmap print preview anchor",
+              "searchreplace visualblocks code",
+              "insertdatetime media table contextmenu paste"
+          ],
+          toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+      });
+
+                     console.log('makeCurrentPageGetterFn(scope, attrs, paginationId)');
+  </script>
+
+<form method="post" action="somepage">
+    <textarea name="content" style="width:100%"></textarea>
+</form>
+
+
+</div>
+
+<!-- javascripts 
+<script src="js/tinymce/tinymce.min.js"></script>
+ <script type="text/javascript">
+tinymce.init({
+    selector: "textarea",
+    plugins: [
+        "advlist autolink lists link image charmap print preview anchor",
+        "searchreplace visualblocks code fullscreen",
+        "insertdatetime media table contextmenu paste"
+    ],
+    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+});
+</script>-->

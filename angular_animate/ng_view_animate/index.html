@@ -1,0 +1,74 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example - example-example94-production</title>
+  <style>
+        .animate-switch-container {
+            position:relative;
+            background:white;
+            border:1px solid black;
+            height:40px;
+            overflow:hidden;
+          }
+
+          .animate-switch {
+            padding:10px;
+          }
+
+          .animate-switch.ng-animate {
+            transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+          }
+
+          .animate-switch.ng-leave.ng-leave-active,
+          .animate-switch.ng-enter {
+            top:-50px;
+          }
+          .animate-switch.ng-leave,
+          .animate-switch.ng-enter.ng-enter-active {
+            top:0;
+          }
+  </style>
+  
+
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-animate.js"></script>
+  <script>
+
+(function(angular) {
+  'use strict';
+
+    angular.module('switchExample', ['ngAnimate'])
+      .controller('ExampleController', ['$scope', function($scope) {
+        $scope.items = ['settings', 'home', 'other'];
+        $scope.selection = $scope.items[0];
+    }]);
+
+})(window.angular);
+
+  </script>
+  
+
+  
+</head>
+<body ng-app="switchExample">
+  <div ng-controller="ExampleController">
+  <select ng-model="selection" ng-options="item for item in items">
+  </select>
+  <code>selection={{selection}}</code>
+  <hr/>
+  <div class="animate-switch-container" ng-switch on="selection">
+      <div class="animate-switch" ng-switch-when="settings"><p class="para"><span class="new">hello</span></p></div>
+      <div class="animate-switch" ng-switch-when="home"><p class="para"><span class="new">hello</span></div>
+      <div class="animate-switch" ng-switch-default><p class="para"><span class="new">hello</span></div>
+  </div>
+</div>
+</body>
+</html>

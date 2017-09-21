@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>directive scope</title>
+   
+  <!--<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>-->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body ng-app="myApp" >
+
+<div ng-controller="AppCtrl as mainCtrl">
+   <div class="row">
+  
+
+
+    <div class="col-md-4">
+
+    <profile-panel1>
+              <p> 1 this directive doesnt use template so evething between tags is being displayed</p>
+              <p> and it inherits scope from MainConroller as : <span style="color:green;font-style: bold;">{{mainCtrl.valueFromMainController}}</span></p>
+
+    </profile-panel1>
+
+
+
+
+
+
+<script type="text/javascript">
+
+
+          /************** Main Controller *********/
+
+ var app = angular.module('myApp', [])
+            .controller('AppCtrl', function($scope){
+
+                  var mainController = this;
+
+                  mainController.valueFromMainController = 'value from main contorller';
+                  mainController.valueFromMainControllerOneWay  = 'value from main contorller one way {{interpolation needed}}';
+
+                  //method
+                  mainController.methodInController =function(){
+                        console.log('mouseover applied');
+                  };
+
+            });
+
+     
+
+        /************** Main Controller *********/
+
+
+
+            /************* 1 no scope defined ,no template  ,  it inherits scope from MAIN CONTROLLER *****/
+
+
+
+ app.directive('profilePanel1', function(){
+    return {
+        restrict: 'EA',
+        controller:function($scope){
+
+          console.log('1 scope:false (default) it inherits from main Controller scope');  
+          console.log($scope);
+
+          //you can change  mainController.valueFromMainController cause it is inherited from main Conntrller as Javasript inheritence;
+          $scope.mainCtrl.valueFromMainController = "value from mainController changed in directive 1";
+
+        }
+
+        
+    };
+});
+</script>
+
+    <profile-panel2>
+              <p> 2 this directive doesnt use template so evething between tags is being displayed</p>
+              <p> scope:true and it inherits scope from MainConroller as : <span style="color:green;font-style: bold;">{{mainCtrl.valueFromMainController}}</span></p>
+
+    </profile-panel2>
+
+<script>
+      /************* 2 no template,scope:true  ,  it inherits scope from MAIN CONTROLLER *****/
+
+
+  app.directive('profilePanel2', function(){
+     return {
+         restrict: 'EA',
+         scope:true,
+         controller:function($scope){
+
+
+            console.log('2 scope:true so directive creates scope but still inherits from main Controller scope');  
+            console.log($scope);
+
+           //you can change  mainController.valueFromMainController cause it is inherited from main Conntrller as Javasript inheritence;
+           $scope.mainCtrl.valueFromMainController = "value from mainController changed in directive 2";
+
+         }
+
+         
+     };
+ });
+
+  </script>
+
+
+
+
+    <profile-panel3>
+              <p>this is being replaced by template</p>
+    </profile-panel3>
+
+
+  <script>
+
+
+       /************* 3 template, isolated scope:{}, controllerAs: name of isolated controller for template *****/
+
+
+       //scope:{}, ISOLATED SCOPE IS ALWAYS LINKED TO TEMPLATE RULE !!!
+
+
+   app.directive('profilePanel3', function(){
+      return {
+          restrict: 'EA',
+          scope:{},  //isolated scope always reflects template or template ID so anything inside tempate creates the scope 
+          controllerAs:"directiveIsolatedScope3",//for consistency you can name your controller so it bocomes $scope.directiveIsolatedScope or directiveIsolatedScope in template;
+          controller:function($scope){
+
+             $scope.valuefromIsolatedScope = 'valuefromIsolatedScope directive';
+             console.log('4 valuefromIsolatedScope for template ');  
+             console.log($scope);
+
+            //you can change  mainController.valueFromMainController cause it is inherited from main Conntrller as Javasript inheritence;
+            //$scope.mainCtrl.valueFromMainController = "value from mainController changed in directive";
+
+          },
+          template:"<p> 3....3this is isolated scope set for template and gets $scope.value {{directiveIsolatedScope3.valuefromIsolatedScope}}"
+
+          
+      };
+  });
+
+
+
+
+
+        /************* 4 template, isolated scope:{ directiveVars:mainCotrolerVars }, no controller name assigned   , ***/
+  </script>
+
+
+    <!--- Important ONLY LOWER CASE LETTERS ARE ALLWED AS DIRECTIVE ATRIBUTE -->
+     <profile-panel4 connectingattribute='mainCtrl.valueFromMainController'  connectingattributeoneway='{{ mainCtrl.valueFromMainControllerOneWay }}' passvalue='mainCtrl.methodInController()'>
+              <p>this is being replaced by template</p>
+  </profile-panel4>
+  
+
+  <script>
+
+    app.directive('profilePanel4', function(){
+       return {
+           restrict: 'EA',
+           scope:{ //is attached to scope so there is no point setting controllerAs: name ----unless you set bindtoContorller:True --next example !
+
+              directiveValue:'=connectingattribute', //two way binding;
+              directiveValue2:'@connectingattributeoneway', //one way bindding interpoloation needed for read in Template {{ mainControllerValue }}
+              passingMethod:'&passvalue'
+
+
+
+
+           },  //isolated scope always reflects template or template ID so anything inside tempate creates the scope 
+           controller:function($scope){
+
+              console.log('4 valuefromIsolatedScope with passing for template ');  
+              console.log($scope);
+
+             //you can change  mainController.valueFromMainController cause it is inherited from main Conntrller as Javasript inheritence;
+             //$scope.mainCtrl.valueFromMainController = "value from mainController changed in directive";
+
+           },
+
+           // NOTICE THERE IS NOT CONTROLLER ASSING IT LINKS DIRECTLY TO $SCOPE IN THIS CASE;
+           template:"<p>4 this is isolated scope with connecting atributes connectingAttribute <span style='color:red'>is.....5 {{ directiveValue }}......</span>"+ 
+           "ONE WAY DATA BINDING <span style='color:red'>is directiveValue2.....5 {{ directiveValue2 }}......</span>"+
+           "ASSIGNIN METHOD <span style='color:red'>is method .....  method from mainController:  '</span><button type='button' ng-mouseover=' passingMethod() >MOUSE OVER ME</button"
+
+           
+       };
+   });
+
+
+              /************* 5 template, isolated scope:{ directiveVars:mainCotrolerVars }, controllerAs: name of isolated controller for template, bindToController:true for scope  , ***/
+
+</script>
+
+    <!--- Important ONLY LOWER CASE LETTERS ARE ALLWED AS DIRECTIVE ATRIBUTE -->
+     <profile-panel5 connectingattribute='mainCtrl.valueFromMainController'  connectingattributeoneway='{{ mainCtrl.valueFromMainControllerOneWay }}' passvalue='mainCtrl.methodInController()'>
+              <p>this is being replaced by template</p>
+  </profile-panel5>
+
+
+
+  <script>
+
+    app.directive('profilePanel5', function(){
+       return {
+           restrict: 'EA',
+
+           scope:{ //is attached to scope so there is no point setting controllerAs: name ----unless you set bindtoContorller:True --next example !
+
+              directiveValue:'=connectingattribute', //two way binding;
+              directiveValue2:'@connectingattributeoneway', //one way bindding interpoloation needed for read in Template {{ mainControllerValue }}
+              passingMethod:'&passvalue'
+
+
+
+
+           },  //isolated scope always reflects template or template ID so anything inside tempate creates the scope 
+           controller:function($scope){
+
+              console.log('5 valuefromIsolatedScope with passing for template ');  
+              console.log($scope);
+
+             //you can change  mainController.valueFromMainController cause it is inherited from main Conntrller as Javasript inheritence;
+             //$scope.mainCtrl.valueFromMainController = "value from mainController changed in directive";
+
+           },
+           bindToController:true, //this will assign scope to the controller so controller name can be used in the template;
+           controllerAs:'directiveController5',
+
+           // NOTICE THERE IS NOT CONTROLLER ASSING IT LINKS DIRECTLY TO $SCOPE IN THIS CASE;
+           template:"<p>5 this is isolated scope with connecting atributes connectingAttribute <span style='color:red'>name controller  is.....[ {{ directiveController5.directiveValue }} ]......</span>"+ 
+           "ONE WAY DATA BINDING <span style='color:red'>is directiveValue2 name controller.....[ {{ directiveController5.directiveValue2 }}......]</span>"+
+           "ASSIGNIN METHOD <span style='color:red'>is method .....  method from mainController:  '</span><button type='button' ng-mouseover=' passingMethod() >MOUSE OVER ME</button"
+
+           
+       };
+   });
+
+                    /************* 6 template, isolated scope:{ directiveVars:mainCotrolerVars }, controllerAs: name of isolated controller for template, bindToController:true for scope  , ***/
+
+
+</script>
+
+    <!--- Important ONLY LOWER CASE LETTERS ARE ALLWED AS DIRECTIVE ATRIBUTE -->
+     <profile-panel6 
+
+
+
+     ='mainCtrl.valueFromMainController'  connectingattributeoneway='{{ mainCtrl.valueFromMainControllerOneWay }}' passvalue='mainCtrl.methodInController()'>
+              <p>this is being replaced by template 6</p>
+  </profile-panel6>
+
+
+
+  <script>
+
+    app.directive('profilePanel6', function(){
+       return {
+           restrict: 'EA',
+
+           //bindToController introduced in Angular 1.3 
+          //NO SCOPE ASSING means scope:false and it will inherits evertyhing from mainController and link to controller directive;
+           scope :{ //is attached to scope so there is no point setting controllerAs: name ----unless you set bindtoContorller:True --next example !
+
+              directiveValue:'=connectingattribute', //two way binding;
+              directiveValue2:'@connectingattributeoneway', //one way bindding interpoloation needed for read in Template {{ mainControllerValue }}
+              passingMethod:'&passvalue'
+
+
+           },  //isolated scope always reflects template or template ID so anything inside tempate creates the scope 
+           bindToController:true,  //if you have templae is better to use scope {atributes} and then assingn to controller by bindToController:true;
+           controller:function($scope){
+
+              console.log('6 valuefromIsolatedScope with passing for template ');  
+              console.log($scope);
+
+             //you can change  mainController.valueFromMainController cause it is inherited from main Conntrller as Javasript inheritence;
+             //$scope.mainCtrl.valueFromMainController = "value from mainController changed in directive";
+
+           },
+           controllerAs:'directiveController6',
+
+           // NOTICE THERE IS NOT CONTROLLER ASSING IT LINKS DIRECTLY TO $SCOPE IN THIS CASE;
+           template:"<p>6 this is isolated scope with connecting atributes connectingAttribute  6 <span style='color:red'>name controller  is.....[ {{ directiveController6.directiveValue }} ]......</span>"+ 
+           "ONE WAY DATA BINDING <span style='color:red'>is directiveValue2 name controller 6.....[ {{ directiveController6.directiveValue2 }}......]</span>"+
+           "ASSIGNIN METHOD <span style='color:red'>is method .....  method from mainController:  '</span><button type='button' ng-mouseover=' passingMethod() >MOUSE OVER ME</button"
+
+           
+       };
+   });
+    /************* 7 no template for scope,no scope instead isolated bindToController { directiveVars:mainCotrolerVars }, controllerAs: name of isolated controller,****/
+
+</script>
+
+
+
+
+
+</script>
+
+    <!--- Important ONLY LOWER CASE LETTERS ARE ALLWED AS DIRECTIVE ATRIBUTE -->
+     <profile-panel7 connectingattribute='mainCtrl.valueFromMainController'  connectingattributeoneway='{{ mainCtrl.valueFromMainControllerOneWay }}' passvalue='mainCtrl.methodInController()'>
+<p>7 this is isolated scope with connecting atributes connectingAttribute  7 <span style='color:red'>name controller  is.....[ {{ directiveController7.directiveValue }} ]......</span>
+ONE WAY DATA BINDING <span style='color:red'>is directiveValue2 name controller 7.....[ {{ directiveController7.directiveValue2 }}......]</span>
+<p>this is from main Controller cause scope is not defined  or set scope:true so in directive inheritence <span style='color:red'> {{ mainCtrl.valueFromMainController }}</span> </p>
+  </profile-panel7>
+
+
+
+  <script>
+
+    app.directive('profilePanel7', function(){
+       return {
+           restrict: 'EA',
+
+           /**
+                  IMPORTANT SINCE THERE IS NO SCOPE ASSIGN SO MAIN SCOPE IS INHERITED WITH ALL VALUES defined in mainController check console 7 below;
+                  scope is not defined means scope:false which is default value;
+
+                  if there is no scope assign is set to false (default) and that creates duplication !! cause it will link to 
+
+           */
+           //scope:{}, ISOLATED SCOPE IS ALWAYS LINKED TO TEMPLATE it wont work properlly without TEMPLATE 
+           //scope:true, //if is set to true is still inherits but not linking to directive scope UCOMMENT AND CHECK CONSOLE 7 BELOW;
+           bindToController :{ //is attached to scope so there is no point setting controllerAs: name ----unless you set bindtoContorller:True --next example !
+
+              directiveValue:'=connectingattribute', //two way binding;
+              directiveValue2:'@connectingattributeoneway', //one way bindding interpoloation needed for read in Template {{ mainControllerValue }}
+              passingMethod:'&passvalue'
+
+
+           },  //isolated scope always reflects template or template ID so anything inside tempate creates the scope 
+           controller:function($scope){
+
+              console.log('7 valuefromIsolatedScope with passing no template needed');  
+              console.log($scope);
+
+             //you can change  mainController.valueFromMainController cause it is inherited from main Conntrller as Javasript inheritence;
+             //$scope.mainCtrl.valueFromMainController = "value from mainController changed in directive";
+
+           },
+           controllerAs:'directiveController7'
+
+           // NOTICE THERE IS NOT CONTROLLER ASSING IT LINKS DIRECTLY TO $SCOPE IN THIS CASE;
+
+           
+       };
+   });
+
+</script>
+
+  </div>
+    
+</div>
+</body>
+</html>

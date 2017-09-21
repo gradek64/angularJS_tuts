@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- CSS (load bootstrap) -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <style>
+        .navbar { border-radius:0; }
+
+        .preloader {
+            position: absolute;
+            width:100%;
+            height: 200px;
+            background: url('Ball_preloader.gif') center center no-repeat white;
+        }
+    </style>
+
+    <!-- JS (load angular, ui-router, and our custom js file) -->
+    <script type="text/javascript" src="http://bennadel.github.io/JavaScript-Demos/vendor/require/require-2.1.9.min.js"></script>
+    <script src="http://code.angularjs.org/1.2.13/angular.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+    <script src="app.js"></script>
+</head>
+
+<!-- apply our angular app to our site -->
+<body ng-app="routerApp" ng-controller="mainController">
+
+<!-- NAVIGATION -->
+<nav class="navbar navbar-inverse" role="navigation">
+    <div class="navbar-header">
+        <a class="navbar-brand" ui-sref="#">AngularUI Router</a>
+    </div>
+    <ul class="nav navbar-nav">
+<!--         anthing ui-sth is related to ui.router  -->
+        <li><a ui-sref="home">Home</a></li>
+        <li><a ui-sref="about">About</a></li>
+        <li><a ui-sref="resolve">Resolve</a></li>
+        <li><a ui-sref="resolveHttp">resolveHttp</a></li>
+        <li><a ui-sref="resolvePromise">resolvePromise</a></li>
+        <li><a ui-sref="resolveRequire">resolveRequireJS</a></li>
+
+
+
+    </ul>
+</nav>
+
+<!-- MAIN CONTENT -->
+<!-- THIS IS WHERE WE WILL INJECT OUR CONTENT ============================== hidePreloader = hidePreloader ? false : true;-->
+<div class="container" style="position: relative;">
+    <div ui-view ></div>
+    
+    <div class="preloader" ng-hide="hidePreloader"></div>
+</div>
+
+<div class="text-center">
+    <p>A tutorial by <a href="http://scotch.io" target="_blank">scotch.io</a></p>
+    <p>View the tutorial: <a href="http://scotch.io/tutorials/javascript/angular-routing-using-ui-router" target="_blank">AngularJS Routing using UI-Router</a></p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example - example-example53-production</title>
+  
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+  
+
+  
+</head>
+
+  <script>
+  var moduleSet = angular.module('compileExample', []);
+
+
+
+/***************************************** COMPILE, PRE-LINK, POST-LINK, LINK **************************/
+
+
+  /*    ORDER OF DIRECTIVE EXECUTING;
+
+         Directive has 4 major stages:
+              1   compile  (in compile method);
+              2   controller (in controler method );
+              3   pre-link (in compile function);
+              4   link     (in link method);
+              5.  post-link (in the compile method);
+              
+  */
+  moduleSet.directive('compilePhaseCompile', function() { //from <div compile-phase-compile>
+        // Return the directive configuration. Note that we are executing at
+        // priority 1 so that we execute before the transclude version.
+        return({
+                  compile: compile
+                });
+
+        function compile( tElement, tAttibutes ) { 
+                console.log('running compile');
+                /*
+
+                      compile method it will run first and compile the dom structure even with the angular code in it, 
+                      you can even attached java script code to it 
+
+                */
+                var list = $(tElement).children('ul').css('border','4px solid red');  
+                $(tElement).find('ul').children( "li" ).css('border','1px solid red');  
+
+                list.mouseover(function(){
+                  $(this).css('border','1px solid green');
+                });
+                list.mouseout(function(){
+                  $(this).css('border','4px solid red');
+                });
+
+
+                     return {
+                              pre: function(scope, iElem, iAttrs){
+                                console.log(name + ': pre link'); //after compile
+                              },
+                              post: function(scope, iElem, iAttrs){
+                                console.log(name + ': post link');
+                              } 
+                      }   
+          }//end of compile
+  });
+   moduleSet.directive('compilePhaseLink', function() { //from <div compile-phase-link>
+
+                return({
+                    link: link,
+                    transclude: true
+                });
+        
+                // I bind the JavaScript events to the local scope.
+                function link( scope, element, attributes, _controller, transclude ) {
+
+                    // Link method will run last and will run on elements that stricly belongs to element scope, so 
+                    //the css is not apllied to ng-repeat part since it was rendered outside the element scope and before ng-repeat finished;
+                    transclude(
+                        function( userContent ) {
+                            $(userContent)
+                                .eq( 1 )
+                                    .css('border','1px solid green');
+                            ;
+                            $(userContent)
+                                .children( "li" )
+                                    .css('border','1px solid green');
+                            ;
+                            $(element).append( userContent );
+                        }
+                    );
+                }
+  });
+
+
+
+/***************************************** END OF COMPILE, PRE-LINK, POST-LINK, LINK **************************/
+
+
+  /*
+        THE SIMPLEST DIRECTIVE EVER ;P
+  */
+
+  moduleSet.directive('myCustomer', function() {
+    return {
+        //'<strong>this is the simplest directive ever</strong>;'
+        template: 'this is the simplest directive ever'
+      };
+   });
+
+
+
+
+
+  /*DIRECTIVE COULD BE SET IN CONFIG MODE*/
+  moduleSet.config(['$compileProvider', function ($compileProvider) {
+    // configure new 'compile' directive by passing a directive
+    // factory function. The factory function injects the '$compile'
+    $compileProvider.directive('compile', function($compile) {
+      // directive factory creates a link function
+      return function(scope, element, attrs) {
+        scope.$watch(
+          function(scope) {
+             // watch the 'compile' expression for changes
+            return scope.$eval(attrs.compile);
+          },
+          function(value) {
+            // when the 'compile' expression changes
+            // assign it into the current DOM
+            element.html(value);
+
+            // compile the new DOM and link it to the current
+            // scope.
+            // NOTE: we only compile .childNodes so that
+            // we don't get into infinite loop compiling ourselves
+            $compile(element.contents())(scope);
+          }
+        );
+      };
+    });
+ }])
+  .controller('GreeterController', ['$scope', function($scope) {
+    $scope.name = 'Angular';
+    $scope.html = 'Hello {{name}}';
+  }]);
+</script>
+<body ng-app="compileExample">
+<div ng-controller="GreeterController">
+  <input ng-model="name"> <br/>
+  <textarea ng-model="html"></textarea> <br/>
+  <div compile="html"></div>
+</div>
+
+
+<div my-customer></div>
+
+
+<!--directive compile and link methods -->
+    <div compile-phase-compile>
+        <ul>
+              <li>
+                Heather <em>(static)</em>
+              </li>
+              <li>
+                Kim <em>(static)</em>
+              </li>
+              <li ng-repeat="friend in [ 'Joanna', 'Sarah' ,'Chris','Harry']">
+                {{ friend }} <em>(ng-repeat)</em>
+              </li>
+        </ul>
+    </div>
+    <div compile-phase-link>
+        <ul>
+            <li>
+                Heather <em>(static)</em>
+            </li>
+            <li>
+                Kim <em>(static)</em>
+            </li>
+            <li ng-repeat="friend in [ 'Joanna', 'Sarah','Greg','Aga' ]">
+                {{ friend }} <em>(ng-repeat)</em>
+            </li>
+        </ul>
+    </div> 
+<!-- end of directive compile and link methods -->
+
+</body>
+</html>
+
+<!-- 
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+-->

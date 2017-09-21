@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example - example-example42-production</title>
+  
+
+
+
+  
+</head>
+<body>
+<div ng-app="xmpl">
+
+    <div class="show-scope-demo">
+
+        <!-- first controller -->
+        <div ng-controller="GreetController">
+          Hello {{name}}!
+
+        </div>
+        <!-- second controler -->
+        <div ng-controller="ListController">
+          <ol>
+            <li ng-repeat="name in names">{{name}} from {{department}}</li> <!-- name property is difined in $rootScope --> 
+          </ol>
+        </div>
+
+        <!-- third controller with child controller-->
+        <div ng-controller="parentController">
+          Hello {{name}} {{lastname}}!
+          <!-- fourth child controller -->
+              <div ng-controller="childController">
+                Hello {{name}} {{lastname}}! <!-- name property is difined in $scope of parent Controller no need for $rootscope-->
+              </div>
+        </div>
+
+
+        <!-- finth controller with child controller-->
+        <div ng-controller="parentControllerEvent as Parent">
+          <!-- Hello {{name}} {{lastname}}!<p  ng-click='applyChangesParent()' >clickHere to aplly changes to children and parent</p> -->
+          Parent.data = {{ Parent.data }}
+          <p ng-click='applyChangesParent()'>click me to see broadcast event firing</p>
+          <!-- fourth child controller -->
+              <div ng-controller="childControllerEvent as Child">
+                <!-- Hello {{name}} {{lastname}}! <p  ng-click='applyChanges()' >clickHere to aplly changes to children</p> -->
+                Child.data = {{ Child.data }}
+              </div>
+        </div>
+
+
+        <div ng-controller="ParentdiggestCttrl">
+            <!--$apply method -->
+             message sent from Timeout Child Controller not updated in $scope.$digest: {{parentMessage}}
+            <div ng-controller="diggestCttrl">
+            <!--$apply method -->
+             message sent from Timeout: {{message}}
+            </div>
+        </div>
+
+   </div>
+
+	</div>
+</div>
+
+
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+  <script>
+  	
+
+
+  	var app =  angular.module('xmpl', []);
+
+
+    /*******
+                  $SCOPE AND $ROOTSCOPE
+
+    ********/
+
+    app.controller('GreetController', ['$scope', '$rootScope', function($scope, $rootScope) {
+      $scope.name = 'World';
+      $rootScope.department = 'Angular'; //THIS PROPERTY IS ACCESSABLE IN ENTIRE APP because is it hooked to $rootScope;
+    }]);
+
+    app.controller('ListController', ['$scope', function($scope) { //this controller is not a child of any controller but still inherit from $rootScope
+      $scope.names = ['Igor', 'Misko', 'Vojta'];
+    }]);
+
+      /******************
+      $rootScope = is only one for AngularModule and it could be accessed in any controller even if it is not 
+      a child of other scope as diagram below;
+
+      <div ng-controller='Greg'></div>
+      <div ng-controller='Chris'></div> //if you want to comunicate beteen those two you need to use $rootscope;
+
+
+
+
+      *******************/
+
+    app.controller('parentController', ['$scope', function($scope) { 
+      $scope.name = 'Greg';
+      $scope.lastname = 'Gil';
+    }]);
+
+     app.controller('childController', ['$scope', function($scope) { 
+      $scope.lastname = 'Ptak'; //$scope.name will be inherited from parent Controller no need for $rootScope;
+    }]);
+
+      /******************
+      $scope = is defind for every controller , but if angular can not find property asociated with current scope it will go down the 
+      chierarchy up to parent scope to find a property in javascript it is known as prototypical inheritance, and child scopes prototypically inherit from their parents. So once controller has chilldren controller , children can access teh properties from parent but not vice versa.
+      *******************/
+
+
+
+      /*******
+                  $WATCH vesus $EVENT
+                  ### general rule is if you need to show changes onces in DOM structure use $Event
+                  if you need constant update use $watch
+
+      ********/
+
+        app.controller('parentControllerEvent',
+            function parentControllerEvent ($scope) {
+
+            $scope.applyChangesParent = function(){
+                  //set custom Event 'parent' that child Controller can listen to;
+                 $scope.$broadcast('parent', 'Some data'); // going down!
+
+            }
+
+
+              //listen for the custom Event set in Child Controller;
+              $scope.$on('child', function (event, data) {
+                console.log(data); // 'Some data'
+              });
+
+        });
+
+        app.controller('childControllerEvent',
+            function childControllerEvent ($scope) {
+
+              //listen for the custom Event set in Parent Controller;
+              $scope.$on('parent', function (event, data) {
+                console.log(data); // 'Some data'
+              });
+
+            $scope.applyChangesParent = function(){
+
+            }
+                  //set custom even in Child Controller that Parent Container can listen to;
+              $scope.$emit('child', 'Some data'); // going up!
+
+        });
+
+         /*******
+                  $APPLY and $DIGEST
+                  ### any changes done not in angular as (loading external scripts, javascript timers, javascript code) or any DOM modifications
+                  done again outside Angular can be notify by $apply and $digtest;
+
+      ********/
+      app.controller('ParentdiggestCttrl', function ParentdiggestCttrl($scope) {
+
+      });
+      app.controller('diggestCttrl', function diggestCttrl($scope,$rootScope) {
+          $scope.message = "Waiting 2000ms for update";
+    
+        setTimeout(function () {  //setTimout is javascipt code so Angular doesnt know about so to notify it you need use $scope.$apply();
+          
+                          $rootScope.parentMessage = "this is not bein update in $scope.$digest since it belongs to parent scope";
+                          //$rootScope.parentMessage it will only update with $scope.$apply()
+                          $scope.message = "javascrpt Timeout fired and Angular knows about it by $scope.$apply();";
+                          
+                          $scope.$digest();
+                          /*********
+                          $scope.$digest() it will only work for current scope and children scopes it wont update parent scope 
+                          so it wont bubble up to the ladder ony will go down ;
+                          
+                          $scope.$apply() will only aplly changes to parent scope variable if you use $rootScope not a $scope;
+
+
+                          **/
+
+        }, 2000);
+      })
+
+
+
+
+        //$digest scope in only aplly any changes to the model in current scope and it children scope it wont go up the ladder to parent to inform him about the changes 
+        //$apply scope will affect all scopes in the model;
+
+
+/*
+     app.controller('childControllerEvent as Child', ['$scope', function($scope) { 
+      $scope.lastname = 'Ptak'; //$scope.name will be inherited from parent Controller no need for $rootScope;
+
+            // firing an event downwards from parent to children ($rootScope -> $scope );
+      $scope.applyChangesParent=function(){
+        $scope.$broadcast('myCustomEvent2', {
+              val: 'Values have been changed 2' // send whatever you want
+        });
+      }
+       
+
+      $scope.$on('myCustomEvent2', function (event, data) {
+         $scope.apply();
+         console.log(data.val); // 'Data to send'
+         });
+    }]);*/
+
+
+
+
+
+
+
+
+    /*******
+                 $APPLY and $DIGEST method
+
+            RECOMENDATIONS 
+
+              * Use $apply or $digest only when browser DOM events have triggered outside of AngularJS.
+
+    ********/
+
+
+    /***** $APPLY method will check any changes in every scope so it is less optimised that way 
+
+
+
+  	/*app.controller('XmplController',function($rootScope,$scope){
+
+  		console.log('controller')
+
+
+
+
+        // firing an event downwards from parent to children ($rootScope -> $scope );
+       //$rootScope.$broadcast('myCustomEvent2', {
+       // val: 'Values have been changed 2' // send whatever you want
+      // });
+
+        /*1. APPLY AND DIGEST METHOD*/
+
+  			//$scope.$apply(); //apply with update message for $rootScope as well as for $scope
+  			//$scope.$digest(); //will update only the scope is attache to it either $rootScope or $scope
+
+  		//},2000)
+
+
+  		//	UPDATING THE SCOPE 
+  		/* 	Angulear has several ways to track the any changes to the DOM elements */
+  		/* 2. $WATCH */
+
+
+      // $scope.$watch(
+                   // function(scopeController){ //variable that represents scope 
+                    //  return scopeController.root_Scope; //this is being watched for any changes;
+                   // },
+                   // function handleFooChange( newValue, oldValue ) { //2 functions for new and old value of staff being watched;
+                      //it will run twice no more what even in inintial state will give you old value;
+                      //  console.log( "scope_controller", newValue );
+                    //}
+               // );
+
+       /* 3. EVENTS $ON*/
+
+       // firing an event upwards
+
+       
+
+       // listen for the event in the relevant $scope
+       //$rootScope.$on('myCustomEvent', function (event, data) {
+       //  console.log(data); // 'Data to send'
+       //});
+
+       // listen for the event in the relevant $scope
+      // $scope.$on('myCustomEvent2', function (event, data) {
+      // });
+
+        // console.log(data.val); // 'Data to send'
+       /*
+            When using $rootScope.$on, we need to unbind those listeners each time the $scope is destroyed. $scope.$on listeners are automatically unbound, but we’ll need to call the above closure manually on the $destroy event:
+       */
+        // $scope $destroy
+        //$scope.$on('$destroy', myCustomEvent);
+
+
+
+
+  	//});*/
+  </script>
+
+</body>
+</html>
+
+<!-- 
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+-->

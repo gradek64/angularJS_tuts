@@ -1,0 +1,82 @@
+<script type="text/javascript">
+	
+		angular.module("myApp", [])
+		  .directive("myDirective", function () {
+		    return {
+		      restrict: "AEC",  //applies to attribute or element or comment 
+		      scope:true, //directive creates its own scope that inherits from the parent scope;
+		      scope:false, // parent scope(default)
+		      scope:{}, //isolated scope without atributes so no connection with outside World;
+		      scope: {			//isolated scope with attributes that link to the outside controller;
+		        text: "@myText",  //@ string {{value}}
+		        twoWayBind: "=myTwoWayBind", // = model var = value;
+		        oneWayBind: "&myOneWayBind" //method binding;
+		      },
+		      templateUrl: 'myCard', //anchor to <script type="text/ng-template" id='my-card'></script>
+		      template:'<p>{{angular.expression}}</p>' //html mark-up with optional angular binding expresions;
+		      controllerAs: 'ctrl',    //ctrl variable in directive template {{ctrl.myTitle}} {{ctrl.myPic}}
+		      bindToController: {      //from angular 1.4 you can bind attributes in controller;
+		      		title: '=myTitle', //binds atributes both ways <my-card-controller my-title="'Ilfracombe'"></my-card-controller>
+			      	pic: '=myPic'		//binds atributes both ways <my-card-controller my-pic="'http://www.imagesource.gif'"></my-card-controller>
+			  },
+			  transclude: true,  //anything between tags <my-directive>original content</my-directive> could be displayde by ng-transclude or in link function transclude(); etc..
+			  controller:function(){}, //define directive controller as function;
+			  replace:true,//replaces the directive tags with html tag (it uses the most outer container for that directive so if it paragraph it will convert to <p>)
+			  compile:function compile( tElement, tAttributes,transclude) { //first phase of directive being compiled befre bootstrap kicks in;
+
+                    console.log( "run compile" );
+                    console.log('tElement compile is: ')
+                    console.log(tElement);
+                    console.log('tAttributes compile is:');
+                    console.log(tAttributes);
+                    console.log('transclude compile is:');
+                    console.log(transclude);
+
+    			},
+    		  compile:compile, //another way of calling compiled
+    		  link:function link(scope, element, attributes) {// linking phase is mostly used for transclude and any modyfincations to DOM, bootstraping is finished and Dom fully loaded; YOU CAN NOT USE COMPILE AT THE SAME TIME link method WILL NOT FIRE !
+                    console.log( "......run link.........." );
+                    console.log('scope link is: ')
+                    console.log(scope);
+                    console.log('element link is:');
+                    console.log(element);
+                    console.log('attributes link is:');
+                    console.log(attributes);
+
+    			},
+    			priority:1000 //usefull feature if you wan to run 2 directives for the same tag , the one with hight priority will run first !
+
+    			/*CHEAKY METHOD*/
+    			compile:function compile( tElement, tAttributes,transclude) { //first phase of directive being compiled befre bootstrap kicks in;
+
+                    //....CODE ....
+
+                    return(link); //this will run both compile and the link method as well 
+
+    			},
+
+
+
+		});
+
+
+
+		  function compile( tElement, tAttributes,transclude) {
+
+                  return {
+                       pre: function preLink(scope, iElement, iAttrs, controller) { //fires when compiling starts
+                            console.log('scope pre');
+                            console.log(scope);
+                       },
+                       post: function postLink(scope, iElement, iAttrs, controller) {//fires when compilieng is finished;
+                          console.log('scope postLink');
+                          console.log(scope);
+                       }
+                  }
+		  }
+
+		  function link(scope, element, attributes) { //this one will fire aftter compile finish exucuting its method return(link);
+		  		//code .....
+		  }
+
+</script>

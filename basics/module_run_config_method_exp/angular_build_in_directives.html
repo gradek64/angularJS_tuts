@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>directive scope</title>
+   
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body ng-app="myApp" >
+
+
+
+
+ <!--  /*********************** ng-bind *********************************/ -->
+
+     <!--  
+
+     it is the way to bind data with view so basically this:
+
+      
+  <p ng-bind="firstname"></p> =====  <p> {{firstname}} </p>
+
+
+      -->
+<h3>Angular interpolation {{var}} and ng-bind</h3>
+<div  ng-controller="myCtrl">
+    <input type="text" ng-model="firstname"></input></br>
+    <p ng-bind="firstname"></p>
+    <p> {{firstname}} </p>
+</div>
+
+<script>
+      var app = angular.module('myApp', []);
+</script>
+
+
+
+
+<script>
+app.controller('myCtrl', function($scope) {
+    $scope.firstname = "John";
+});
+</script>
+
+<!-- **************************************************************************** -->
+ <!--  /*********************** ng-show ng-hide  *************************
+
+          ng-show and ng-hide is a boulean value tha hide or show the element very simple !
+          usefull to use with ng-click to show or hide content; 
+
+ ********/ -->
+
+<h2>ng-show and ng-hide directives</h2>
+<div ng-controller="MyControllerShow" >
+      <span ng-show="myData.showIt">Content 1 </span><input type="button" value="{{button1}}" ng-click="showIt()"></input></br>
+      <span ng-hide="myData.showIt">Content 2 </span><input type="button" value="{{button2}}" ng-click="showIt()"></input>
+  </div>
+
+  <script>
+   
+    app.controller("MyControllerShow", function($scope) {
+      $scope.myData = {};
+      $scope.myData.showIt = true;
+
+      $scope.button1 = 'hide';
+      $scope.button2 = 'show';
+
+      $scope.showIt = function(){
+        $scope.myData.showIt = !$scope.myData.showIt;
+
+        !$scope.myData.showIt?$scope.button1 = 'show':$scope.button1 = 'hide';
+        $scope.myData.showIt?$scope.button2 = 'show':$scope.button2 = 'hide';
+      }
+    });
+  </script>
+  <!-- **************************************************************************** -->
+<h2>ng-switch</h2>
+          <!--
+                The ng-switch directive is used if you want to add or remove HTML elements from the DOM based on data in the model.
+          -->
+  <div ng-controller="MyController" >
+  <select ng-model="selection" ng-options="item for item in [1, 2, 3]"></select>
+    <div ng-switch on="selection">
+        <div ng-switch-when="1">Shown when switch is 1</div>
+        <div ng-switch-when="2">Shown when switch is 2</div>
+        <div ng-switch-default>Shown when switch is anything else than 1 and 2</div>
+    </div>
+</div>
+
+<script>
+    app.controller("MyController", function($scope) {
+      $scope.selection = 1;
+    });
+</script>
+<!-- **************************************************************************** -->
+ <!--  /*********************** ng-show ng-hide  *************************
+
+          ng-show and ng-hide is a boulean value tha hide or show the element very simple !
+          usefull to use with ng-click to show or hide content; 
+
+ ********/ -->
+
+ <h2>ng-if directives</h2>
+<div ng-controller="MyController1" ng-init="myData.showIta=true">
+      <span ng-if="myDataa.showIta" class="animate-if">Content 1 </span><input type="button" value="{{button1a}}" ng-click="showIta()"></input></br>
+      <span ng-if="!myDataa.showIta" class="animate-if">Content 2 </span><input type="button" value="{{button2a}}" ng-click="showIta()"></input>
+  </div>
+
+  <script>
+   
+    app.controller("MyController1", function($scope) {
+      $scope.myDataa = {};
+      $scope.myDataa.showIta = true;
+
+      $scope.button1a = 'hide';
+      $scope.button2a = 'show';
+
+      $scope.showIta = function(){
+        $scope.myDataa.showIta = !$scope.myDataa.showIta;
+        console.log($scope.myDataa.showIta);
+
+        !$scope.myDataa.showIta?$scope.button1a = 'show':$scope.button1a = 'hide';
+        $scope.myDataa.showIta?$scope.button2a = 'show':$scope.button2a = 'hide';
+      }
+    });
+  </script>
+<!-- **************************************************************************** -->
+ 
+
+<!--  /*********************** ng-include *************************
+
+          The ng-include directive can be used to include HTML fragments from other files into the view's HTML template. Here is an example: 
+
+ ********/ -->
+
+  <div ng-controller="MyController" >
+  <input type="button" value="show html 1" ng-click="myData.showItHTML=true"></input><input type="button" value="show hmtl 2" ng-click="myData.showItHTML=false"></input></br>
+  <div ng-include="myData.showItHTML && 'fragment-1.html' || 'fragment-2.html'"></div>
+</div>
+
+<script>
+    app.controller("MyController", function($scope) {
+        $scope.myData = {};
+        $scope.myData.showIt = true;
+    });
+</script>
+<!-- **************************************************************************** -->
+ 
+
+<!--  /*********************** ng-repeat *************************
+
+
+ ********/ -->
+<*****************************>
+<ol ng-controller='MyControllerRepeat'>
+   <li ng-repeat="theItem in myData.items">{{theItem.text}}</li>
+</ol>
+
+<script>
+    app.controller("MyControllerRepeat", function($scope) {
+        $scope.myData = {};
+        $scope.myData.items = [ {text : "one"}, {text : "two"}, {text : "three"} ];
+    });
+</script>
+<*****************************>
+<ol ng-controller='MyControllerRepeatObject'>
+   <li ng-repeat="(name, value) in myData.myObject">{{name}} = {{value}}</li>
+</ol>
+
+<script>
+    app.controller("MyControllerRepeatObject", function($scope) {
+        $scope.myData = {};
+        $scope.myData.myObject = { var1 : "val1", var2 : "val3", var3 : "val3"};
+    });
+</script>
+
+
+
+
+
+
+</body>
+</html>

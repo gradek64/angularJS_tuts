@@ -1,0 +1,33 @@
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<div class="panel-heading">
+    World Cup 2014
+  </div>
+
+  <button type="button" class="btn btn-danger dropdown-toggle" ng-click="close({message: 'closing for now'})">{{info}}<span class="caret"></span></button>
+
+  <ul class="list-group">
+
+      <div>{{flavors}}</div>
+      <div>{{text}}</div>
+      <div>{{objects.greg}}</div>
+
+
+    <!-- Hover or click on any item in the list triggers transitions defined by countryMeta directive -->
+    <li ng-repeat="item in twoWayBound"  class="list-group-item">
+      {{ item.title }}
+    </li>
+
+
+    <!-- Hover or click on any item in the list triggers transitions defined by countryMeta directive -->
+    <div>Constant grabed from main Controlller below</div>
+    <li ng-repeat="item in countries"  class="list-group-item">
+      {{ item.name }}
+    </li>
+
+  </ul>
+
+<!-- 
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+-->

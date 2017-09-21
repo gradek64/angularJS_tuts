@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>http request</title>
+</head>
+<body ng-app="myModule" ng-controller="HelloCtrl">
+
+	<p>message below is called from callback function of angular factor service</p>
+
+	<p>message: {{message}}</p>
+
+	<p>message below is called from angular promise service </p>
+
+	<p>message: {{messagePromise}}</p>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
+<script>
+
+var myModule = angular.module('myModule', []);
+
+//controler;
+myModule.controller('HelloCtrl', function($scope, HelloWorld,HelloWorldPromise) { //this controller takes $scope, and custom HelloHorld service 
+
+	$scope.message = '';
+
+	var message = HelloWorld.getMessages(function(callback){ //this callback functon 
+		console.log(callback);
+		$scope.message = callback[0];		
+	});
+
+	//return promise with a callback function promise.then(function(arguments){});
+	var mesasgePromise = HelloWorldPromise.then(function(positiveCall,negativeCall){
+		console.log(positiveCall);
+		$scope.mesasgePromise= positiveCall[0];		
+	});
+
+
+
+
+
+});
+
+
+
+
+myModule.factory('HelloWorld', function($timeout,) {
+	var myObject = "message is";
+    var getMessages = function(callback) { //this function has callback function inside
+      $timeout(function() {
+
+        callback(['Hello']);
+
+      }, 2000);
+    };
+    return {
+      getMessages: getMessages
+  
+  });
+
+
+myModule.factory('HelloWorldPromise', function($timeout,$q) { //this factory takes $timeout,and $q promise servce
+			var getMessages = function() {
+
+						//$q is a promise angular service that is meant to tell you if sth passed request or not  
+
+					    var deferred = $q.defer(); //1.start the promise service 
+
+						    $timeout(function() {
+
+						      deferred.resolve(['Hello from promise']); //2.this is called when the promise is meant to be positive
+
+						    }, 2000);
+
+					    return deferred.promise; //3.promise object is return back to callback function called promise.then(function(success,error){})
+			  };
+
+			  return {  //return entire factory service back to Controller
+			    getMessages: getMessages
+			  };
+	}
+});	
+
+</script>	
+</body> 

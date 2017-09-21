@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ngMessages Demo</title>
+    
+    <!-- CSS -->
+    <!-- load bootstrap and add some custom css -->
+   <!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/cerulean/bootstrap.min.css">  -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <style>
+*{
+	margin:0;
+	padding:0;
+}
+
+body{
+	font:15px/1.3 'Open Sans', sans-serif;
+	color: #ffffff;
+	text-align:center;
+}
+
+a, a:visited {
+	outline:none;
+	color:#389dc1;
+}
+
+a:hover{
+	text-decoration:none;
+}
+
+section, footer, header, aside, nav{
+	display: block;
+}
+
+/*-------------------------
+	The edit tooltip
+--------------------------*/
+
+.tooltip{
+	background-color:#5c9bb7;
+	position: absolute;
+	top:10%;
+	left: 0;
+
+	background-image:-webkit-linear-gradient(top, #5c9bb7, #5392ad);
+	background-image:-moz-linear-gradient(top, #5c9bb7, #5392ad);
+	background-image:linear-gradient(top, #5c9bb7, #5392ad);
+
+	box-shadow: 0 1px 1px #ccc;
+	border-radius:3px;
+	width: 290px;
+	padding: 10px;
+	z-index: 10;
+}
+
+.tooltip:after{
+	/* The tip of the tooltip */
+	content:'';
+	position:absolute;
+	border:6px solid #5190ac;
+	border-color:#5190ac transparent transparent;
+	width:0;
+	height:0;
+	bottom:-12px;
+	left:50%;
+	margin-left:-6px;
+}
+
+.tooltip input{
+
+	border: none;
+	width: 100%;
+	line-height: 34px;
+	border-radius: 3px;
+	box-shadow: 0 2px 6px #bbb inset;
+	text-align: center;
+	font-size: 16px;
+	font-family: inherit;
+	color: #8d9395;
+	font-weight: bold;
+	outline: none;
+	background-color: white;
+}
+
+p{
+	font-size:22px;
+	font-weight:bold;
+	color:#6d8088;
+	height: 30px;
+	cursor:default;
+}
+
+p b{
+	color:#ffffff;
+	display:inline-block;
+	padding:5px 10px;
+	background-color:#c4d7e0;
+	border-radius:2px;
+	text-transform:uppercase;
+	font-size:18px;
+}
+
+p:before{
+	content:'✎';
+	display:inline-block;
+	margin-right:5px;
+	font-weight:normal;
+	vertical-align: text-bottom;
+}
+
+#main{
+	height:300px;
+	position:relative;
+	padding-top: 150px;
+}
+    </style>
+    
+   
+</head>
+<body class="container" ng-app="app" ng-controller="MainCtrl">
+<!-- When this element is clicked, hide the tooltip -->
+<div id="main" ng-click="hideTooltip()">
+
+	<!-- This is the tooltip. It is shown only when the showtooltip variable is truthful -->
+	<div class="tooltip" ng-click="$event.stopPropagation()" ng-show="showtooltip" ng-style="{ 'top':topPosition, 'left':leftPosition }">
+
+		<!-- ng-model binds the contents of the text field with the "value" model.
+		 Any changes to the text field will automatically update the value, and
+		 all other bindings on the page that depend on it.  -->
+		<input type="text" ng-model="message[value]" />
+	</div>
+
+	<!-- VERY CLEVER -->
+	<p  style="position:absolute;top:40%;left:50%;height:10%;width:20%;" ng-click="toggleTooltip($event,values = 'value')">{{ message.value = message.value ? message.value : "assign me " }}</p> <!-- ASSIGN DEFAULT message.value TO "assign me" IF message.value IS "udefinded" uderwise use message.value from model  -->
+	<!-- VERY CLEVER -->
+	<p style="position:absolute;top:60%;left:50%;height:10%;width:20%;" ng-click="toggleTooltip($event,values = 'value2')">{{ message.value2 = message.value2 ? message.value2: "assign me 2" }}</p> <!-- ASSIGN DEFAULT message.value TO "assign me" IF message.value IS "udefinded" uderwise use value from model  -->
+
+
+</div>
+
+
+
+     <!-- JS -->
+    <script src="https://code.angularjs.org/1.4.0/angular.js"></script>
+    <script>
+    angular
+    .module('app', [])
+    .controller('MainCtrl', function($scope){
+
+    	// $scope is a special object that makes
+	// its properties available to the view as
+	// variables. Here we set some default values:
+
+	$scope.showtooltip = false;
+	//$scope.value = 'Edit me.';
+
+	// Some helper functions that will be
+	// available in the angular declarations
+
+	$scope.showthat = function(){
+		    	console.log($scope.showEye );
+
+	};
+
+	$scope.hideTooltip = function(){
+
+		// When a model is changed, the view will be automatically
+		// updated by by AngularJS. In this case it will hide the tooltip.
+
+		$scope.showtooltip = false;
+	}
+
+	$scope.toggleTooltip = function(e,aValue){
+		e.stopPropagation();
+		$scope.showtooltip = !$scope.showtooltip;
+
+		console.log(e.target.style.top);
+		//myStyle={color:'red'}
+		//toolipStyle={'top':e.target.style.top}
+		console.log(e.target.style.height)
+		$scope.topPosition = parseInt(e.target.style.top) - 15 + "%"
+		$scope.leftPosition = e.target.style.left;
+
+		$scope.value = aValue;
+
+		;
+	}
+
+    		
+
+    });
+    </script>
+    
+</body>
+</html>

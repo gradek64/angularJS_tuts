@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <title>AngularJS Routing example</title>
+
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+		body {
+		  padding-top: 10px;
+		  background-color: #F5F5F5;
+		}
+    </style>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body ng-app="sampleApp">
+
+    <div class="container">
+		<div class="row">
+		<div class="col-md-3">
+		   <ul class="nav">
+				<li><a href="#AddNewOrder"> Add New Order </a></li>
+				<li><a href="#ShowOrders"> Show Order </a></li>
+				<li><a href="#ShowOrder/1234"> Show Order ID _1234_</a></li>
+				<li><a href="#newOrder"> new Order</a></li>
+			</ul>
+		</div>
+		<div class="col-md-9">
+		  	<div ng-view></div>
+		</div>
+
+		</div>
+
+    </div><!-- /.container -->
+	
+	<!-- template hooked to the script tag not a seperate file-->
+    <script type="text/ng-template" id="add_new_order.htm">
+ 
+        <h2> Add New Order </h2>
+        {{message}}
+ 
+    </script>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+	<script src="app.js"></script>
+
+  </body>
+</html>
+

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>angular providers - similarity beetween factory and service</title>
+</head>
+<body>
+<div ng-app="app" ng-controller="appCtrl as ctr">
+	<p>angular Factory</p>
+	<p>angular {{ctr.factory_value}}</p>
+	<p>angular Service</p>
+	<p>angular {{ctr.service_value}}</p>
+	<p>angular Factory Constructor</p>
+	<p>angular {{ctr.factory_value_constructor}}</p>
+	<p>angular Service Constructor</p>
+	<p>angular {{ctr.service_value_constructor}}</p>
+	<p>angular Provider type Provider</p>
+	<p>angular {{ctr.provider_value}}</p>
+</div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+<script type="text/javascript">
+		
+		var app = angular.module('app',[]);
+
+
+		//CONSTANT can be injected in config phase;
+		app.constant('planetNameConstant', 'Greasy Giant Constant');
+		//Value
+		app.value('planetNameValue', 'Greasy Giant Value');
+
+
+
+		app.factory('myFactory',function(){
+			
+
+		//at this part you can define anything you want FACTORY only cars about this.property and return value 
+
+			var declaredObject = {};
+			declaredObject.myString = 'this is from factory ';
+			declaredObject.addData = function(newString){
+				return this.myString+=newString;
+			};
+
+
+
+			//the staff the fact0ry cares about is return part which in this case an object 
+			//FACTORY ALLOWS TO DEFINE YOUR OBJECT AND RETURN IT WITHOUT EXPOSINT IT PRIVATE METHODS AND PROPETIES //IN RETURN STATEMENT;
+			return declaredObject;	
+
+		});
+
+		app.service('myService',function(){
+
+
+			//at this part you can define antyging you want SERVICE only cars about this.property and return value 
+			var myString = 'this is from service ';
+			var addData = function(newString){
+				return myString+=newString;
+			};
+
+
+			//the staff the service cares about is return part which in this case an object	
+			//but the syntax is slight diffrent by exposing private methods and properties;
+
+
+			//SERVICE SKIPS ONE STEP AND EXPOSES OBJECT WITH METHODS AND VALUE SO YOU DONT HAVE TO DECLARE IT AS 
+			this.addData = function(data){
+				return addData(data);	
+			};
+			this.getData = function(){
+				return myString;
+			}
+
+
+		});
+
+
+		//SERVICE and FACTORY in Constructors as new Instances of custom classes 
+		var Projector = function(){
+			this.property = 'string that comes from Projector constructor',
+			this.method = function(fromS){
+				return fromS + this.property;
+			}
+		};
+
+		app.factory('factory_new_object_Instance',function(){
+			return new Projector();
+		});
+		app.service('service_new_object_Instance',Projector);//as you can see you can skip new (keyword)
+		//since service doing that behind the scene not need to declare it 
+
+
+
+		//USING DECORATOR 
+
+			/* Decorator is the way to excess provider(service) and dont change actual code of inside but have it exposed to the controler straight away an example below*/
+
+			//Decorator can be used in .config() method not just in controller 
+
+		/* PROVIDER
+
+		service type = $Provider 
+
+		it is not as common and it utilizes $get method to be initiated 
+
+		*/
+
+
+
+
+		app.provider('myTest',function(){
+			var myObject = {};
+			myObject.myString = 'this is from service ';
+			myObject.addData = function(newString){
+				return this.myString+=newString;
+			};
+
+			//this is what provider cares of return $get part
+			return {
+				$get :function(){
+					return myObject;
+				}
+			};
+		});
+
+		//PROVIDERS CAN BE EASILLY SET UP IN CONFIG MODE by U need to use nameProvider END
+		//BUT THEY ALWASYS HAVE TO HAVE Provider END even for ANGULAR BUILD IN PROVIDERS AS 
+		//$routeProvider and @locationProvider 
+		app.config(['planetNameConstant','myTestProvider','$provide','$locationProvider',function(
+				planetNameConstant,
+				myTestProvider,
+				$provide,
+				$locationProvider){ 
+	
+            //all providers can be set in config with $provide service but they can not be accessed here only provider type provider can be injected into Config with the nameProvider as abover
+            $provide.factory('factoryCreatedinConfig', ['$location', function($location){
+				    return {
+				    	urls:function(){
+				    		return	$location.absUrl();
+				    	}
+				  };
+			}]);
+
+			//but for $location service/provider there is option to get it here so it could be confirgured in here BUT 	$location service and $locationProvider ARE COMPLETLY DIFFRENT !
+				console.log('$locationProvider');
+				console.log($locationProvider)
+				planetNameConstant+='this is in Config phase';
+				console.log(planetNameConstant);
+;           
+
+			
+		}]);
+
+		app.run(['planetNameValue','planetNameConstant',function(planetNameValue,planetNameConstant){
+			console.log('value in run phase');
+			this.set = planetNameValue;
+			console.log(this.set);
+			console.log(planetNameConstant);
+		}]);
+
+
+
+
+		app.controller('appCtrl',['planetNameConstant','planetNameValue','myFactory','myService','factory_new_object_Instance','service_new_object_Instance','myTest','$scope','factoryCreatedinConfig','$injector',function(
+				planetNameConstant,planetNameValue,
+				myFactory,myService,
+				factory_new_object_Instance,
+				service_new_object_Instance,
+				myTest,
+				$scope,
+				factoryCreatedinConfig,
+				$injector
+				){ //the order has to be the same //as in array
+
+				//in this case $scope is extended by ctr object 
+				//so $scope.ctr.value  is the same as 'this' keyword it was extended by: ng-controller="appCtrl as ctr"
+
+				/*
+						this = $scope.ctr
+				*/
+
+				//console.log($injector);
+				 //var injector = angular.injector(["app"]);
+
+				 //try change constant
+				 planetNameConstant ='has been changed';
+				 console.log(planetNameConstant);
+
+				 planetNameValue+='has been changed';
+				 console.log(planetNameValue);
+
+				console.log(factoryCreatedinConfig.urls());
+				$scope.ctr.factory_value = myFactory.addData('called myFactory');
+				this.service_value = myService.addData('called myService©');
+				this.provider_value = myTest.addData('called from Provider');
+				this.factory_value_constructor = factory_new_object_Instance.method('factory_new_object_constructor says');
+				this.service_value_constructor = service_new_object_Instance.method('service_value_constructor says ');
+		}]);
+
+
+
+	
+
+</script>
+</body>
+</html>

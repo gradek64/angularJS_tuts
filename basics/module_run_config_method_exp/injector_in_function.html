@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>angular_injector</title>
+  
+</head>
+<body ng-app="xmpl">
+  
+<div ng-controller="XmplController"> 
+  {{ info }} </br>
+  {{ greeting }}
+  <p  ng-click='getValueWithClick()' >click me to inject value by injector.get() </p>
+  <p  ng-click='getValueWithClick2()' >click me to inject value by injector.invoke() </p>
+</div>
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+<script type="text/javascript">
+          (function(angular) {
+            'use strict';
+
+
+          angular.module('xmpl.service', []);
+          var ng = angular.module('xmpl', ['xmpl.service'/*,'xmpl.directive', 'xmpl.filter'*/])
+
+
+            .value('defaultColor' , '#000000')
+
+
+            .service('colorPicker',function(defaultColor){
+                this.defaultColor = defaultColor;
+                this.setColor = function(color) {
+                  this.defaultColor = color;
+                };
+
+                this.getColor = function() {
+                  return this.defaultColor;
+                };
+            })
+
+
+            //the are several ways to inject services into controler you can use $injector build it Dependecny to initiatie a service 
+            
+            //1. inject depenedecny $injektor into Controller;
+            .controller('XmplController', function($scope,$injector){
+
+
+               $scope.getValueWithClick = function() {  //inject service into function by $injector.get();
+                    var defV = $injector.get('defaultColor');
+                    alert(defV);
+                }
+
+                $scope.getValueWithClick2 = function() {  //inject service into function by $injector.invoke();
+                  $injector.invoke(function (colorPicker) {
+                    colorPicker.setColor('#hshshs')
+                    alert(colorPicker.getColor());
+                  });
+                }
+
+            });
+
+            var injector = angular.injector(["ng"]);
+             
+            var someFunction = function($http) {
+                    alert('injected');
+            };
+             
+            injector.invoke(someFunction);
+
+            //2. you can inject service outside cotroller as well 
+           /* angular.injector(angular.module('xmpl', ['xmpl.service'/*,'xmpl.directive', 'xmpl.filter'])).invoke(function (colorPicker) {
+              alert( colorPicker.getColor() );
+            });*/
+
+
+
+            /*angular.injector(angular.module('xmpl.service', []))
+              .invoke(function (colorPicker) {
+                    alert( colorPicker.getColor() );
+            });*/
+          
+            
+
+
+
+
+            //angular.module('xmpl.service', []).controller('XmplController', function($scope,$injector){
+             /* $scope.info = injectConfigConstant;
+              $scope.greeting = greeter.greet(user.name);
+              greetingWordsService.callme();*/
+            //});
+
+
+          })(window.angular)
+
+
+
+/*
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+*/
+
+
+  
+</script>
+
+
+
+</body>
+</html>

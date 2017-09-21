@@ -1,0 +1,98 @@
+<style>
+  
+  [ng-if] {}
+
+[ng-if].ng-enter {
+  -webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+  transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+}
+
+[ng-if].ng-enter,
+[ng-if].ng-leave.ng-leave-active {
+  opacity: 0;
+}
+
+[ng-if].ng-leave,
+[ng-if].ng-enter.ng-enter-active {
+  opacity: 1;
+}
+
+
+      .animated {
+        opacity:1;
+        font-size:100%;
+        -webkit-animation-name: mymove;  /* Chrome, Safari, Opera */
+        -webkit-animation-duration: 5s;  /* Chrome, Safari, Opera */
+        animation-name: mymove;
+        animation-duration: 1s;
+      }
+              /* Chrome, Safari, Opera */
+        
+      @-webkit-keyframes mymove {
+             from { font-size:75%; 0;opacity: 0 }
+             to   { font-size:100%;opacity: 1;}
+      }
+
+      .animatedBack {
+        opacity:0;
+        font-size:75%;
+        -webkit-animation-name: mymoveback;  /* Chrome, Safari, Opera */
+        -webkit-animation-duration: 5s;  /* Chrome, Safari, Opera */
+        animation-name: mymoveback;
+        animation-duration: 1s;
+      }
+              /* Chrome, Safari, Opera */
+        
+      @-webkit-keyframes mymoveback {
+             from { font-size:100%; 0;opacity: 1 }
+             to   { font-size:75%;opacity: 0;}
+      }
+
+
+
+</style>
+
+<div class="panel panel-default " style="border:1px solid grey;">
+  <div class="panel-heading">
+    World Cup 2014
+  </div>
+
+  <ul class="list-group tab-pane">
+    <li class="list-group-item">
+      <!-- Placing a value in the input value filters the list and triggers 'ng-enter' and 'ng-leave' transition when items are added and removed 
+      <input ng-model="search.name" type="text" placeholder="Search by name..." class="form-control" />
+    </li>-->
+
+    <li class="list-group-item tab-pane">
+      <strong>
+        {{user}}
+      </strong>
+
+    <li class="list-group-item">
+      <!-- Placing a value in the input value filters the list and triggers 'ng-enter' and 'ng-leave' transition when items are added and removed -->
+      <input ng-model="search.name" type="text" placeholder="Search by name..." class="form-control" />
+    </li>
+
+
+    <li class="list-group-item">
+      <strong>
+        Country
+      </strong>
+
+      <!-- Clicking on this button reorders the list and triggers 'ng-move' transition 
+      <button ng-click="order.toggle()" class="btn btn-link btn-xs">
+        <span ng-show="order.isAscending()" class="glyphicon glyphicon-chevron-up"></span>
+        <span ng-hide="order.isAscending()" class="glyphicon glyphicon-chevron-down"></span>
+      </button>
+    </li>-->
+
+    <!-- Hover or click on any item in the list triggers transitions defined by countryMeta directive | filter:search | orderBy:order.predicate-->
+    <ul class="list-group">
+        <li ng-repeat="country in countryList | filter:search " country-meta="country" class="list-group-item grab">
+          {{ country.name }}
+        </li> 
+    </ul>
+  </ul>
+</div>
+
+

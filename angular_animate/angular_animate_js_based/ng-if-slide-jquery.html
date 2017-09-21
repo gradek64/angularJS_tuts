@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Example - example-example94-production</title>
+
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-animate.js"></script>
+  <script>
+
+(function(angular) {
+  'use strict';
+
+    angular.module('myApp', ['ngAnimate'])
+    .controller('ExampleController', function($scope) { 
+        //this.toggle = true;
+    })
+    .animation('.slide', function() {
+      return {
+        leave: function(element,done) {
+
+          console.log("slide down1");
+              $(element).slideUp("slow",function(){ 
+                 $('.para').fadeOut();
+                done();
+              })
+
+        },
+        enter: function(element,done) {
+          console.log("slide in");
+                $(element).hide();
+                 $(element).slideDown("slow",function(){ 
+                  $('.para').fadeIn();
+                  done();
+                 })
+        }
+      }
+    })
+
+
+})(window.angular);
+
+  </script>
+  
+
+  
+</head>
+<body ng-app="myApp">
+  <div ng-controller="ExampleController">
+  <button ng-click="toggle=toggle?false:true">click me</button>
+  <div class="animate-switch-container" style="width:50%;height60px;border:1px solid red;">
+      <div class="slide" ng-if="toggle" ><p class="para" style="display:none"><span class="new">hello 4</span></p></div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<html ng-app="countryApp">
+  <head>
+    <meta charset="utf-8">
+    <title>Angular.js JSON Fetching Example</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script src="https://code.angularjs.org/1.4.0/angular.js"></script>
+    <script>
+      var countryApp = angular.module('countryApp', []);
+      countryApp.controller('CountryCtrl', function ($scope, $http, $q, $log){
+
+              var first  = $http.get("./first.json"),
+              second = $http.get("./second.json"),
+              third  = $http.get("./third.json");
+
+          $q.all([first, second, third])
+             .then(function(result) {
+                var tmp = [];
+                angular.forEach(result, function(response) {
+                  tmp.push(response.data);
+                });
+                return tmp;
+                })
+              .then(function(tmpResult) {
+                all  = [];
+                 angular.forEach(tmpResult, function(response) {
+                  all = response;
+                  all.concat(response)
+                  $scope.countries += response;
+                  $log.info(all);
+                });
+
+                
+                
+
+
+               //$scope.combinedResult = tmpResult.join(", ");
+          });
+        });
+
+
+
+    </script>
+  </head>
+  <body ng-controller="CountryCtrl">
+	<h2>Angular.js JSON Fetching Example</h2>
+    <table>
+      <tr>
+        <th>Code</th>
+		<th>Country</th>
+        <th>Population</th>
+      </tr>
+      <tr ng-repeat="country in countries">
+        <td>{{country.code}}</td>
+		<td>{{country.name}}</td>
+        <td>{{country.population}}</td>
+      </tr>
+    </table>
+  </body>
+</html>

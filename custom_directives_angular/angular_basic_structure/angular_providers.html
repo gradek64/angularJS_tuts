@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Angular providers</title>
+</head>
+<body ng-app="myApp">
+<div ng-controller='myController as myCtrl'></div>
+	<p> IpAddress: {{myCtrl.ip}} </p>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+<script>
+
+
+/*
+			Angular comes with 5 types of services htat could injected into controller or just work on its own, that meant to provide some sort service specified by the developer they also know as PROVIDERS. We can 
+			specify 5 types of services as follows:
+
+
+*/
+	
+		//******* 1.VALUE ***********
+
+		angular.module('myApp', []) //init the module 
+
+
+
+		.value('ipAddressValue', '90.78.67.00')
+		//value is basically variable that could be used in others services/providers or in controller 
+
+		.constant('planetName', 'Greasy Giant')
+		//CONSTANT woulud be available event if anugular is not fully boostraped. it's often handy to make them available in both the configuration and run phases. Constant will work in both while Value will only works in run phase and controller.
+
+
+
+		//********** FACTORY returns value ************
+
+				//It is a service provdider that meant to return a value so it could be as simpe as below:
+		.factory('ipAddress', function ipAddressFactory() { //function starts as nameFactory 
+  					return '90.78.67.00.998.8998.777';
+		})//used as value 
+
+		//Factory can except other service providers as VALUE to be injected ad dependency;
+		//Factory can except other service providers as FACTORY STATED ABOVE to be injected ad dependency;
+		.factory('apiToken', ['ipAddressValue','ipAddress', function apiTokenFactory(ipAddressValue,ipAddress) {
+			  var convertIP_to_string = function(data,data1) {
+			    
+			    //convert IP address string to number;
+			    var value = Number(data.replace(/\./gi,''));
+			    var value2 = Number(data1.replace(/\./gi,''));
+
+			    return value + value2;
+			  };
+
+			  var apiToken = convertIP_to_string(ipAddressValue,ipAddress);
+
+			  //always HAS TO RETURN A VALUE
+			  return apiToken;
+		}]) // used as function returning value;
+
+
+
+  		//********** FACTORY returns OBJECT  ************
+  		.factory('InboxService',function InboxServiceFactory($location){
+
+  			return {
+			    getEmails: function () {
+			      return $location.absUrl();
+			    }
+			  };//factory that returns object;
+
+  		})
+
+  		//********** FACTORY returns OBJECT [cleaner syntax] ************
+  		.factory('InboxService2',function InboxServiceFactory($location){
+
+  			
+			 function getEmails() {
+			      return $location.absUrl();
+			    }
+			 return {
+			 		getEmails:getEmails
+			 	 };//factory that returns object;
+
+  		})
+
+  		//********** FACTORY returns callback with a promise service ************
+  		.factory('factoryPromise',function InboxServiceFactory($q){
+
+
+		function asyncGreetings(name) {
+				  var deferred = $q.defer();
+
+				  setTimeout(function() {
+
+				    deferred.notify('About to greet ' + name + '.');
+
+					    if (name) {
+					      deferred.resolve({'hello' : name });
+					    } else {
+					      deferred.reject('Greeting ' + name + ' is not allowed.');
+					    }
+
+				  }, 1000);
+
+				  return deferred.promise;
+		}
+
+		return {
+			asyncGreet:asyncGreetings
+		}
+
+  		}) //REALLY COOL
+
+
+  		//********** FACTORY returns new Instance of object as Constructor new Object()************
+		.factory('PersonService', function PersonService() {
+				  
+			//consturctor;
+			function Person() {
+				    this.foo = function () {
+				    		return 'this is foo function';
+						};
+			}
+
+			Person.prototype.bar = function () {
+				 			return 'this is protopype bar function';
+			};
+
+			return Person;
+		})
+
+
+
+		//********** SERVICE  ***********	
+
+					//services are slightly more limited to factories since Angular uses new Contructor methods 
+					//behind the scenes so it is not as claean if you want to initate your custom Constructor as //Person in above factory example
+
+
+
+		//those are gret and simple of making object to return and set values;			
+		.service('PersonServiceProvider', function PersonServiceProvider() {
+				  
+
+			this.setName ='',
+			this.setName = function(name){
+					this.setName = name;
+					return this.setName;
+			},
+			this.getName = function(){
+				return 'set Name is :'+ this.setName;
+			}
+
+			/*Person.prototype.bar = function () {
+				 			return 'this is protopype bar function';
+			};*/
+
+
+		})
+			
+			 
+			
+		
+
+
+
+
+
+
+
+
+		//********** injected in Controller and phases of bootstraping ***************
+
+		.config(['planetName', function(planetName) {
+			  
+			//if you try to inject VALUE service it will throw an error at you ! ;)
+			console.log(planetName);
+
+		}])
+
+		//you can inject either VALUE or CONSTANT in run phase;
+		.run(['planetName','InboxService','PersonService','PersonServiceProvider', function(planetName,InboxService,PersonService,PersonServiceProvider) {
+			  
+			console.log(planetName);
+			console.log(InboxService.getEmails());
+
+		   // new instance of PersonService!
+ 		   var newPerson = new PersonService();
+ 		   console.log(newPerson.bar());
+ 		   console.log(newPerson.foo());
+
+
+ 		   // new instance of PersonServiceProvider as service injector!
+ 		   //var newPerson = new PersonService();
+ 		   console.log('gagaga');
+ 		   console.log(PersonServiceProvider.setName('Filip'));
+ 		   console.log(PersonServiceProvider.getName());
+ 		   //console.log(newPerson.foo());
+
+
+
+		}])
+
+									//inject IP Address Value
+									//inject apiToken Factory 
+		.controller('myController', ['ipAddressValue','apiToken','factoryPromise', function myController(ipAddressValue,apiToken,factoryPromise) {
+
+			//assign value service to controller tag;
+			console.log(apiToken);
+  			this.ip = 3;//ipAddressValue;
+
+
+  			//chaining facotry with callback function;
+  			factoryPromise.asyncGreet('Greg').then(function(callbackObject){
+  				console.log(callbackObject);
+  			});
+
+		}]);
+
+
+
+
+
+
+	
+
+
+</script>
+</html>

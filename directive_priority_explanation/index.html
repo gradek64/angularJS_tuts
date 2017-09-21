@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <title>
+        Preloading Data Before Executing ngInclude In AngularJS
+    </title>
+
+</head>
+<body>
+
+    <h1>
+        Directive priority feature
+    </h1>
+
+    <div ng-app='app' ng-controller='mainCtrl'>
+
+   
+        <div ng-repeat="person in People">
+            <li> {{person.name}} </li>
+        </div>
+        
+    </div>
+
+
+
+
+    <!-- Load jQuery and AngularJS. -->
+<!--     <script type="text/javascript" src="http://bennadel.github.io/JavaScript-Demos/vendor/jquery/jquery-2.0.3.min.js"></script>
+ --> 
+   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js"></script>
+    <script src="app.js"></script>
+        
+
+</body>
+</html>
+
+
